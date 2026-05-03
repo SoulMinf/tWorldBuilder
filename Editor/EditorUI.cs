@@ -8,6 +8,7 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.UI.Elements;
 using Terraria.UI;
 using TerrariaInGameWorldEditor.Common.Utils;
+using TerrariaInGameWorldEditor.Content;
 using TerrariaInGameWorldEditor.Content.Tools;
 using TerrariaInGameWorldEditor.UIElements.Button;
 using TerrariaInGameWorldEditor.UIElements.ImageResizeable;
@@ -114,22 +115,22 @@ namespace TerrariaInGameWorldEditor.Editor
             TopHeight = 34;
 
             // x button
-            TIGWEButton xButton = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/General/XButton"));
-            xButton.SetVisibility(0.8f, 1f);
-            xButton.Width.Set(30, 0f);
-            xButton.Height.Set(30, 0f);
-            xButton.Left.Set(-xButton.Width.Pixels - 2, 1f);
-            xButton.Top.Set(6, 0f);
+            TIGWEButton closeButton = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/General/XButton"));
+            closeButton.SetVisibility(0.8f, 1f);
+            closeButton.Width.Set(30, 0f);
+            closeButton.Height.Set(30, 0f);
+            closeButton.Left.Set(-closeButton.Width.Pixels - 2, 1f);
+            closeButton.Top.Set(6, 0f);
             OnRecalculate += (_, _) =>
             {
-                xButton.Left.Set(GetDimensions().Width - xButton.Width.Pixels, 0f);
+                closeButton.Left.Set(GetDimensions().Width - closeButton.Width.Pixels, 0f);
             };
-            xButton.OnLeftClick += (_, _) =>
+            closeButton.OnLeftClick += (_, _) =>
             {
                 EditorSystem.Local.ToggleWindow(EditorWindow.Main);
             };
-            xButton.HoverText = "Close";
-            _titleBar.Append(xButton);
+            closeButton.HoverText = LocalizationUtils.GetTextValue("Editor.UI.HoverText.Close");
+            _titleBar.Append(closeButton);
 
             // settings button
             TIGWEButton settingsButton = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/Editor/SettingsButton"));
@@ -142,7 +143,7 @@ namespace TerrariaInGameWorldEditor.Editor
             {
                 EditorSystem.Local.ToggleWindow(EditorWindow.Settings);
             };
-            settingsButton.HoverText = "Settings";
+            settingsButton.HoverText = LocalizationUtils.GetTextValue("Editor.UI.HoverText.Settings");
             _titleBar.Append(settingsButton);
 
             // blueprints button
@@ -156,7 +157,7 @@ namespace TerrariaInGameWorldEditor.Editor
             {
                 EditorSystem.Local.ToggleWindow(EditorWindow.Blueprints);
             };
-            blueprintsButton.HoverText = "Blueprints";
+            blueprintsButton.HoverText = LocalizationUtils.GetTextValue("Editor.UI.HoverText.Blueprints");
             _titleBar.Append(blueprintsButton);
 
             // save button
@@ -170,7 +171,7 @@ namespace TerrariaInGameWorldEditor.Editor
             {
                 EditorSystem.Local.ToggleWindow(EditorWindow.Save);
             };
-            saveButton.HoverText = "Save";
+            saveButton.HoverText = LocalizationUtils.GetTextValue("Editor.UI.HoverText.Save");
             _titleBar.Append(saveButton);
 
             // mask button
@@ -184,7 +185,7 @@ namespace TerrariaInGameWorldEditor.Editor
             {
                 EditorSystem.Local.ToggleWindow(EditorWindow.Masks);
             };
-            maskButton.HoverText = "Masks";
+            maskButton.HoverText = LocalizationUtils.GetTextValue("Editor.UI.HoverText.Masks");
             _titleBar.Append(maskButton);
 
             // save tile to palette button
@@ -194,7 +195,7 @@ namespace TerrariaInGameWorldEditor.Editor
             saveTileButton.Height.Set(30, 0f);
             saveTileButton.Left.Set(0, 0f);
             saveTileButton.Top.Set(2, 0f);
-            saveTileButton.HoverText = "Add to current palette";
+            saveTileButton.HoverText = LocalizationUtils.GetTextValue("Editor.UI.HoverText.Palette");
             saveTileButton.OnLeftClick += (_, _) =>
             {
                 PaletteItem item = new PaletteItem(EditorSystem.Local.SelectedTile);
@@ -215,7 +216,7 @@ namespace TerrariaInGameWorldEditor.Editor
             _undoButton.Height.Set(30, 0f);
             _undoButton.Left.Set(saveTileButton.Left.Pixels + saveTileButton.Width.Pixels + 2, 0f);
             _undoButton.Top.Set(2, 0f);
-            _undoButton.HoverText = "Undo (Ctrl + Z)";
+            _undoButton.HoverText = LocalizationUtils.GetTextValue("Editor.UI.HoverText.Undo");
             _undoButton.OnLeftClick += (_, _) =>
             {
                 EditorSystem.Local.Undo();
@@ -229,7 +230,7 @@ namespace TerrariaInGameWorldEditor.Editor
             _redoButton.Height.Set(30, 0f);
             _redoButton.Left.Set(_undoButton.Left.Pixels + _undoButton.Width.Pixels + 2, 0f);
             _redoButton.Top.Set(2, 0f);
-            _redoButton.HoverText = "Redo (Ctrl + Y)";
+            _redoButton.HoverText = LocalizationUtils.GetTextValue("Editor.UI.HoverText.Redo");
             _redoButton.OnLeftClick += (_, _) =>
             {
                 EditorSystem.Local.Redo();
@@ -251,14 +252,11 @@ namespace TerrariaInGameWorldEditor.Editor
             selectionActiveText.IgnoresMouseInteraction = true;
             OnRecalculate += (_, _) =>
             {
+                // improve this later
                 selectionActiveText.Top.Set(TopHeight + 20, 0);
-                if (EditorSystem.Local.CurrentSelection?.Count > 0 && EditorSystem.Local.Settings.ShouldShowActiveSelectionText)
+                if (EditorSystem.Local.Settings.ShouldShowActiveSelectionText)
                 {
-                    selectionActiveText.SetText("[c/EAD87A:Note:] A selection is active. \nDrawing/Pasting/Modifying tiles is limited to the selection area.");
-                }
-                else
-                {
-                    selectionActiveText.SetText("");
+                    selectionActiveText.SetText(EditorSystem.Local.CurrentSelection?.Count > 0 ? LocalizationUtils.GetTextValue("Editor.UI.Notes.SelectionActive") : "");
                 }
                 selectionActiveText.Recalculate();
             };
@@ -271,7 +269,7 @@ namespace TerrariaInGameWorldEditor.Editor
             tileButton.Height.Set(30, 0f);
             tileButton.Left.Set(2, 0f);
             tileButton.Top.Set(2, 0f);
-            tileButton.HoverText = "Tile Browser";
+            tileButton.HoverText = LocalizationUtils.GetTextValue("Editor.UI.HoverText.TileBrowser");
             tileButton.OnLeftClick += (_, _) =>
             {
                 EditorSystem.Local.ToggleWindow(EditorWindow.SelectTile);
@@ -336,17 +334,17 @@ namespace TerrariaInGameWorldEditor.Editor
             _right.Append(_palette);
             // buttons for palette
             _paletteDeleteButton = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/Editor/DeleteButton"));
-            _paletteDeleteButton.HoverText = "Delete";
+            _paletteDeleteButton.HoverText = LocalizationUtils.GetTextValue("Editor.UI.HoverText.Delete");
             _paletteDeleteButton.Width.Set(30, 0f);
             _paletteDeleteButton.Height.Set(30, 0f);
             _paletteDeleteButton.SetVisibility(0.8f, 1f);
             _paletteDeleteButton.OnLeftClick += (_, _) =>
             {
                 _palette.IsDeletingItems = !_palette.IsDeletingItems;
-                _paletteDeleteButton.HoverText = _palette.IsDeletingItems ? "Finish deleting" : "Delete";
+                _paletteDeleteButton.HoverText = _palette.IsDeletingItems ? LocalizationUtils.GetTextValue("Editor.UI.HoverText.FinishDelete") : LocalizationUtils.GetTextValue("Editor.UI.HoverText.Delete");
             };
             TIGWEButton paletteClearButton = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/Editor/ClearButton"));
-            paletteClearButton.HoverText = "Clear";
+            paletteClearButton.HoverText = LocalizationUtils.GetTextValue("Editor.UI.HoverText.Clear");
             paletteClearButton.Width.Set(30, 0f);
             paletteClearButton.Height.Set(30, 0f);
             paletteClearButton.SetVisibility(0.8f, 1f);

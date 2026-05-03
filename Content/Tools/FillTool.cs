@@ -3,7 +3,7 @@ using Terraria;
 using Terraria.DataStructures;
 using Terraria.ID;
 using TerrariaInGameWorldEditor.Common;
-using TerrariaInGameWorldEditor.Editor;
+using TerrariaInGameWorldEditor.Common.Utils;
 using TerrariaInGameWorldEditor.UIElements.CheckBox;
 using TerrariaInGameWorldEditor.UIElements.DropDown;
 using TerrariaInGameWorldEditor.UIElements.NumberField;
@@ -33,22 +33,22 @@ namespace TerrariaInGameWorldEditor.Content.Tools
             _tileCapField.OnValueChanged += (newValue) => _tileCap = _tileCapField.GetValue();
             _tileCapField.Width.Set(120, 0);
             _tileCapField.Height.Set(26, 0);
-            Settings.Add(("Tile cap:", _tileCapField));
+            Settings.Add((LocalizationUtils.GetTextValue("Tools.FillTool.Settings.TileCap"), _tileCapField));
 
             // fill tiles connected at corners
             _includeCornersCheckBox = new TIGWECheckBox(false);
-            Settings.Add(("Include tiles connected at corners:", _includeCornersCheckBox));
+            Settings.Add((LocalizationUtils.GetTextValue("Tools.FillTool.Settings.CornerConnect"), _includeCornersCheckBox));
 
             // target
             _targetDropDown = new TIGWEDropDown<Target>();
-            _targetDropDown.AddOption(Target.Auto, "Auto");
-            _targetDropDown.AddOption(Target.Tiles, "Tiles/Air");
-            _targetDropDown.AddOption(Target.Walls, "Walls");
-            _targetDropDown.AddOption(Target.Liquid, "Liquid");
+            _targetDropDown.AddOption(Target.Auto, LocalizationUtils.GetTextValue("Tools.FillTool.Options.Targets.Auto"));
+            _targetDropDown.AddOption(Target.Tiles, LocalizationUtils.GetTextValue("Tools.FillTool.Options.Targets.Tiles"));
+            _targetDropDown.AddOption(Target.Walls, LocalizationUtils.GetTextValue("Tools.FillTool.Options.Targets.Walls"));
+            _targetDropDown.AddOption(Target.Liquid, LocalizationUtils.GetTextValue("Tools.FillTool.Options.Targets.Liquid"));
             _targetDropDown.Height.Set(26, 0f);
             _targetDropDown.Width.Set(140, 0f);
             _targetDropDown.OnOptionChanged += (option) => _mode = option.Value;
-            Settings.Add(("Target:", _targetDropDown));
+            Settings.Add((LocalizationUtils.GetTextValue("Tools.FillTool.Settings.Target"), _targetDropDown));
         }
 
         protected virtual void OnFill(TileCollection tiles)
@@ -155,7 +155,7 @@ namespace TerrariaInGameWorldEditor.Content.Tools
                 if (count > _tileCap)
                 {
                     tilesToAdd.Clear(); // just remove the tiles we wanted to add
-                    TerrariaInGameWorldEditor.NewText($"Area too big to select.");
+                    TerrariaInGameWorldEditor.NewText(LocalizationUtils.GetTextValue("Tools.FillTool.Messages.AreaTooBig"));
                 }
                 else
                 {

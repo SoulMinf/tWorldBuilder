@@ -1,4 +1,5 @@
 ﻿using Terraria.ModLoader;
+using TerrariaInGameWorldEditor.Common.Utils;
 using TerrariaInGameWorldEditor.Content;
 
 namespace TerrariaInGameWorldEditor.Editor
@@ -10,7 +11,12 @@ namespace TerrariaInGameWorldEditor.Editor
             base.OnEnterWorld();
             if (Keybinds.OpenEditorMK.GetAssignedKeys().Count == 0)
             {
-                TerrariaInGameWorldEditor.NewText("Looks like you're missing a keybind for tWorldBuilder, set up some keybinds in the settings to start using the mod.");
+                TerrariaInGameWorldEditor.NewText(LocalizationUtils.GetTextValue("ModPlayer.Messages.NoKeybindSet"));
+            }
+
+            if (EditorSystem.Local.LanguageChange)
+            {
+                TerrariaInGameWorldEditor.NewText(LocalizationUtils.GetTextValue("Editor.System.Messages.LanguageChange"));
             }
         }
     }

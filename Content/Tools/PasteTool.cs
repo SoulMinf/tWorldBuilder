@@ -19,12 +19,11 @@ namespace TerrariaInGameWorldEditor.Content.Tools
         public PasteTool()
         {
             ToggleToolButton = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/Tools/PasteTool"));
-            ToggleToolButton.HoverText = "Paste";
         }
 
         public override string GetInfoText()
         {
-            return $"[c/EAD87A:Count:] {EditorSystem.Local.Clipboard.Count}";
+            return LocalizationUtils.GetTextValue("Tools.PasteTool.InfoText", EditorSystem.Local.Clipboard.Count);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -57,7 +56,7 @@ namespace TerrariaInGameWorldEditor.Content.Tools
                 {
                     Rectangle bounds = GetCurrentSelectionRectangle();
                     ToolUtils.Paste(EditorSystem.Local.Clipboard, new Point16(bounds.X, bounds.Y), true, EditorSystem.Local.Settings.ShouldUpdateDrawnTiles);
-                    TerrariaInGameWorldEditor.NewText($"Pasted.");
+                    TerrariaInGameWorldEditor.NewText(LocalizationUtils.GetTextValue("Tools.PasteTool.Messages.Pasted"));
                 }
 
                 // rotate

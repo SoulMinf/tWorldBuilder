@@ -26,8 +26,7 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.TileSelector
         {
             // load item
             Item item = ContentSamples.ItemsByType[itemId];
-            string[] name = ItemID.Search.GetName(itemId).Split('/');
-            Name = name.Length > 1 ? name[1] : name[0];
+            Name = Lang.GetItemName(itemId).Value;
             ItemId = itemId;
             _createTile = item.createTile;
             _createWall = item.createWall;

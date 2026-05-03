@@ -2,6 +2,7 @@ using log4net;
 using System;
 using Terraria;
 using Terraria.ModLoader;
+using TerrariaInGameWorldEditor.Common.Utils;
 using TerrariaInGameWorldEditor.Editor;
 using TerrariaInGameWorldEditor.UIElements;
 
@@ -39,7 +40,7 @@ namespace TerrariaInGameWorldEditor
             if (EditorSystem.Local.Settings.ShouldShowErrors)
             {
                 _modLogger.Warn(text, ex);
-                Main.NewText($"[c/FF9900:({MODNAME} Warning)] {text}");
+                Main.NewText($"[c/FF9900:({MODNAME} {LocalizationUtils.GetTextValue("Mod.Warning")})] {text}");
             }
         }
 
@@ -48,7 +49,7 @@ namespace TerrariaInGameWorldEditor
             if (EditorSystem.Local.Settings.ShouldShowErrors)
             {
                 _modLogger.Warn(text);
-                Main.NewText($"[c/FF9900:({MODNAME} Warning)] {text}");
+                Main.NewText($"[c/FF9900:({MODNAME} {LocalizationUtils.GetTextValue("Mod.Warning")})] {text}");
             }
         }
 
@@ -57,7 +58,7 @@ namespace TerrariaInGameWorldEditor
             if (EditorSystem.Local.Settings.ShouldShowFatalErrors)
             {
                 _modLogger.Error(text, ex);
-                Main.NewText($"[c/CC3300:({MODNAME} Error)] {text}");
+                Main.NewText($"[c/CC3300:({MODNAME} {LocalizationUtils.GetTextValue("Mod.Error")})] {text}");
             }
         }
 
@@ -66,7 +67,7 @@ namespace TerrariaInGameWorldEditor
             if (EditorSystem.Local.Settings.ShouldShowFatalErrors)
             {
                 _modLogger.Error(text);
-                Main.NewText($"[c/CC3300:({MODNAME} Error)] {text}");
+                Main.NewText($"[c/CC3300:({MODNAME} {LocalizationUtils.GetTextValue("Mod.Error")})] {text}");
             }
         }
     }

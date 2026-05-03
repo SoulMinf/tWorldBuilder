@@ -4,6 +4,7 @@ using ReLogic.Content;
 using System;
 using Terraria;
 using Terraria.ModLoader;
+using TerrariaInGameWorldEditor.Common.Utils;
 
 namespace TerrariaInGameWorldEditor.UIElements
 {
@@ -45,7 +46,7 @@ namespace TerrariaInGameWorldEditor.UIElements
             }
             catch (Exception ex)
             {
-                TerrariaInGameWorldEditor.Error("Failed to set spritebatch to theme.", ex);
+                TerrariaInGameWorldEditor.Error(LocalizationUtils.GetTextValue("UIElements.Utils.Exceptions.SetThemeFail"), ex);
             }
         }
 
@@ -58,7 +59,7 @@ namespace TerrariaInGameWorldEditor.UIElements
             }
             catch (Exception ex)
             {
-                TerrariaInGameWorldEditor.Error("Failed to set spritebatch to normal.", ex);
+                TerrariaInGameWorldEditor.Error(LocalizationUtils.GetTextValue("UIElements.Utils.Exceptions.SetNormalFail"), ex);
             }
         }
 

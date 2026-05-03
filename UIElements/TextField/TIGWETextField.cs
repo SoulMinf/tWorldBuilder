@@ -8,6 +8,7 @@ using Terraria.GameContent.UI.Elements;
 using Terraria.GameInput;
 using Terraria.ModLoader;
 using Terraria.UI;
+using TerrariaInGameWorldEditor.Common.Utils;
 using TerrariaInGameWorldEditor.UIElements.ImageResizeable;
 
 namespace TerrariaInGameWorldEditor.UIElements.TextField
@@ -39,9 +40,9 @@ namespace TerrariaInGameWorldEditor.UIElements.TextField
         private string _currentText = "";
         private Asset<Texture2D> _searchIcon;
 
-        public TIGWETextField(string placeholderText = "Enter text...", int maxTextLength = 30)
+        public TIGWETextField(string placeholderText = null, int maxTextLength = 30)
         {
-            PlaceholderText = placeholderText;
+            PlaceholderText = placeholderText ?? LocalizationUtils.GetTextValue("UIElements.TextField.PlaceholderText");
             _maxTextLength = maxTextLength;
 
             // textures

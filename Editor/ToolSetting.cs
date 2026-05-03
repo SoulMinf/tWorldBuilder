@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using ReLogic.Graphics;
-using System;
 using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;

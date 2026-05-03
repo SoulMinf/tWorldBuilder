@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Terraria.ModLoader;
 using Terraria.ModLoader.UI.Elements;
 using Terraria.UI;
 using TerrariaInGameWorldEditor.UIElements.TextField;
@@ -223,6 +224,36 @@ namespace TerrariaInGameWorldEditor.UIElements.DirectoryGrid
                 AddItemsToGrid(path, null);
                 UpdateOrder();
             }
+        }
+
+        public void CreateNewDirectory(string pathFromGrid = "")
+        {
+            if (IsSearching)
+            {
+                return;
+            }
+
+            // make sure we dont try to create a file with the same name as another one
+            int num = 1;
+            string fullPath = $"{DirectoryPath}\\{pathFromGrid}\\New Folder ({num})";
+            while (Directory.Exists(fullPath))
+            {
+                num++;
+                fullPath = $"{DirectoryPath}\\{pathFromGrid}\\New Folder ({num})";
+            }
+
+            // create the directory and UIBlueprintItem
+            Directory.CreateDirectory(fullPath);
+            TIGWEDirectoryFolder folder = new TIGWEDirectoryFolder(fullPath);
+            folder.CanSelect = CanSelectFolders;
+
+            // add and goto that element in the grid so we can see what we're naming it
+            Add(folder);
+            Goto((element) => 
+            {
+                return ((TIGWEDirectoryItem)element).FullPath.Equals(fullPath);
+            }, true);
+            folder.StartRename();
         }
 
         public void RefreshContent()

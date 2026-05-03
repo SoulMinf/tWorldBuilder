@@ -9,7 +9,6 @@ using Terraria.ModLoader;
 using TerrariaInGameWorldEditor.Common;
 using TerrariaInGameWorldEditor.Common.Utils;
 using TerrariaInGameWorldEditor.Editor;
-using TerrariaInGameWorldEditor.Editor.Windows.Settings;
 using TerrariaInGameWorldEditor.UIElements.Button;
 using TerrariaInGameWorldEditor.UIElements.DropDown;
 using TerrariaInGameWorldEditor.UIElements.NumberField;
@@ -40,22 +39,22 @@ namespace TerrariaInGameWorldEditor.Content.Tools
         public ShapesTool()
         {
             ToggleToolButton = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/Tools/ShapesTool"));
-            ToggleToolButton.HoverText = "Shapes \n[c/EAD87A:Ctrl + Scroll:] Change size by 1 \n[c/EAD87A:Ctrl + Shift + Scroll:] Change size by 10";
+            ToggleToolButton.HoverText = LocalizationUtils.GetTextValue("Tools.ShapesTool.HoverText");
 
             // settings
             // mode
             _modeDropDown = new TIGWEDropDown<ShapeMode>();
-            _modeDropDown.AddOption(ShapeMode.Rectangle, "Rectangle");
-            _modeDropDown.AddOption(ShapeMode.RectangleFilled, "Filled Rectangle");
-            _modeDropDown.AddOption(ShapeMode.Circle, "Circle");
-            _modeDropDown.AddOption(ShapeMode.CircleFilled, "Filled Circle");
+            _modeDropDown.AddOption(ShapeMode.Rectangle, LocalizationUtils.GetTextValue("Tools.ShapesTool.Options.ShapeTypes.Rectangle"));
+            _modeDropDown.AddOption(ShapeMode.RectangleFilled, LocalizationUtils.GetTextValue("Tools.ShapesTool.Options.ShapeTypes.FilledRectangle"));
+            _modeDropDown.AddOption(ShapeMode.Circle, LocalizationUtils.GetTextValue("Tools.ShapesTool.Options.ShapeTypes.Circle"));
+            _modeDropDown.AddOption(ShapeMode.CircleFilled, LocalizationUtils.GetTextValue("Tools.ShapesTool.Options.ShapeTypes.FilledCircle"));
             _modeDropDown.OnOptionChanged += (option) =>
             {
                 _mode = option.Value;
             };
             _modeDropDown.Height.Set(26, 0f);
             _modeDropDown.Width.Set(170, 0f);
-            Settings.Add(("Shape type:", _modeDropDown));
+            Settings.Add((LocalizationUtils.GetTextValue("Tools.ShapesTool.Settings.Type"), _modeDropDown));
 
             // size
             _sizeField = new TIGWENumberField(4, 200, 1);
@@ -66,12 +65,12 @@ namespace TerrariaInGameWorldEditor.Content.Tools
             };
             _sizeField.Width.Set(60, 0);
             _sizeField.Height.Set(26, 0);
-            Settings.Add(("Size:", _sizeField));
+            Settings.Add((LocalizationUtils.GetTextValue("Tools.ShapesTool.Settings.Size"), _sizeField));
         }
 
         public override string GetInfoText()
         {
-            return $"[c/EAD87A:Shape type:] {_mode}, [c/EAD87A:Width:] {_selection.Width}, [c/EAD87A:Height:] {_selection.Height}";
+            return LocalizationUtils.GetTextValue("Tools.ShapesTool.InfoText", _selection.Width, _selection.Height);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

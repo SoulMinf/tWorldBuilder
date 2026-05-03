@@ -7,6 +7,7 @@ using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader;
 using Terraria.UI;
+using TerrariaInGameWorldEditor.Common.Utils;
 using TerrariaInGameWorldEditor.UIElements.Button;
 using TerrariaInGameWorldEditor.UIElements.ImageResizeable;
 using TerrariaInGameWorldEditor.UIElements.TextField;
@@ -70,7 +71,7 @@ namespace TerrariaInGameWorldEditor.UIElements.DirectoryGrid
             _deleteButton = new TIGWEButton(ModContent.Request<Texture2D>($"{UIElementUtils.Path}/UIElements/DirectoryGrid/Delete"));
             ModContent.Request<Texture2D>($"{UIElementUtils.Path}/UIElements/DirectoryGrid/DeleteConfirm");
             _deleteButton.SetVisibility(0.8f, 1f);
-            _deleteButton.HoverText = "Delete";
+            _deleteButton.HoverText = LocalizationUtils.GetTextValue("UIElements.DirectoryItem.HoverText.Delete");
             _deleteButton.Width.Set(26, 0f);
             _deleteButton.Height.Set(26, 0f);
             _deleteButton.OnLeftClick += (_, _) => StartDelete();
@@ -80,7 +81,7 @@ namespace TerrariaInGameWorldEditor.UIElements.DirectoryGrid
             // rename
             _renameButton = new TIGWEButton(ModContent.Request<Texture2D>($"{UIElementUtils.Path}/UIElements/DirectoryGrid/Rename"));
             _renameButton.SetVisibility(0.8f, 1f);
-            _renameButton.HoverText = "Rename";
+            _renameButton.HoverText = LocalizationUtils.GetTextValue("UIElements.DirectoryItem.HoverText.Rename");
             _renameButton.Width.Set(26, 0f);
             _renameButton.Height.Set(26, 0f);
             _renameButton.OnLeftClick += (_, _) => StartRename();
@@ -90,7 +91,7 @@ namespace TerrariaInGameWorldEditor.UIElements.DirectoryGrid
             _renameTextField.Width.Set(150, 0f);
             _confirmRenameButton = new TIGWEButton(ModContent.Request<Texture2D>($"{UIElementUtils.Path}/UIElements/DirectoryGrid/Confirm"));
             _confirmRenameButton.SetVisibility(0.8f, 1f);
-            _confirmRenameButton.HoverText = "Confirm rename";
+            _confirmRenameButton.HoverText = LocalizationUtils.GetTextValue("UIElements.DirectoryItem.HoverText.ConfirmRename");
             _confirmRenameButton.Height.Set(26, 0f);
             _confirmRenameButton.Width.Set(26, 0f);
             _confirmRenameButton.OnLeftClick += (_, _) => ConfirmRename();
@@ -100,7 +101,7 @@ namespace TerrariaInGameWorldEditor.UIElements.DirectoryGrid
             _selectButton.SetVisibility(0.8f, 1f);
             _selectButton.Width.Set(26, 0);
             _selectButton.Height.Set(26, 0);
-            _selectButton.HoverText = "Select";
+            _selectButton.HoverText = LocalizationUtils.GetTextValue("UIElements.DirectoryItem.HoverText.Select");
             _selectButton.OnLeftClick += (_, _) => _parentGrid.OnSelectItem(this);
             Append(_selectButton);
 
@@ -149,7 +150,7 @@ namespace TerrariaInGameWorldEditor.UIElements.DirectoryGrid
             if (!_isDeleting)
             {
                 _deleteButton.SetImage(ModContent.Request<Texture2D>($"{UIElementUtils.Path}/UIElements/DirectoryGrid/DeleteConfirm"));
-                _deleteButton.HoverText = "Confirm delete";
+                _deleteButton.HoverText = LocalizationUtils.GetTextValue("UIElements.DirectoryItem.HoverText.ConfirmDelete");
                 _isDeleting = true;
             }
             else
@@ -190,7 +191,7 @@ namespace TerrariaInGameWorldEditor.UIElements.DirectoryGrid
                 }
                 catch (Exception ex)
                 {
-                    TerrariaInGameWorldEditor.Warn($"Failed to rename, a file or folder with that name likely already exist.", ex);
+                    TerrariaInGameWorldEditor.Warn(LocalizationUtils.GetTextValue("UIElements.DirectoryItem.Exceptions.RenameFail"), ex);
                     return;
                 }
             }
@@ -229,7 +230,7 @@ namespace TerrariaInGameWorldEditor.UIElements.DirectoryGrid
             if (Main.keyState.IsKeyDown(Keys.Escape) || Mouse.GetState().LeftButton == ButtonState.Pressed && !_deleteButton.IsMouseHovering)
             {
                 _isDeleting = false;
-                _deleteButton.HoverText = "Delete";
+                _deleteButton.HoverText = LocalizationUtils.GetTextValue("UIElements.DirectoryItem.HoverText.Delete");
                 _deleteButton.SetImage(ModContent.Request<Texture2D>($"{UIElementUtils.Path}/UIElements/DirectoryGrid/Delete"));
             }
         }

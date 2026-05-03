@@ -42,13 +42,13 @@ namespace TerrariaInGameWorldEditor.Content.Tools
         public LineTool()
         {
             ToggleToolButton = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/Tools/LineTool"));
-            ToggleToolButton.HoverText = "Line \n[c/EAD87A:Ctrl + Scroll:] Change size by 1 \n[c/EAD87A:Ctrl + Shift + Scroll:] Change size by 10";
+            ToggleToolButton.HoverText = LocalizationUtils.GetTextValue("Tools.LineTool.HoverText");
 
             // settings
             // mode
             _modeDropDown = new TIGWEDropDown<LineMode>();
-            _modeDropDown.AddOption(LineMode.SelectedTile, "Selected Tile");
-            _modeDropDown.AddOption(LineMode.Clipboard, "Clipboard");
+            _modeDropDown.AddOption(LineMode.SelectedTile, LocalizationUtils.GetTextValue("Tools.LineTool.Options.Modes.SelectedTile"));
+            _modeDropDown.AddOption(LineMode.Clipboard, LocalizationUtils.GetTextValue("Tools.LineTool.Options.Modes.Clipboard"));
             _modeDropDown.OnOptionChanged += (option) =>
             {
                 _mode = option.Value;
@@ -56,7 +56,7 @@ namespace TerrariaInGameWorldEditor.Content.Tools
             };
             _modeDropDown.Height.Set(26, 0f);
             _modeDropDown.Width.Set(140, 0f);
-            Settings.Add(("Mode:", _modeDropDown));
+            Settings.Add((LocalizationUtils.GetTextValue("Tools.LineTool.Settings.Mode"), _modeDropDown));
 
             // size
             _sizeField = new TIGWENumberField(4, 100, 1);
@@ -68,7 +68,7 @@ namespace TerrariaInGameWorldEditor.Content.Tools
             };
             _sizeField.Width.Set(60, 0);
             _sizeField.Height.Set(26, 0);
-            Settings.Add(("Size:", _sizeField));
+            Settings.Add((LocalizationUtils.GetTextValue("Tools.LineTool.Settings.Size"), _sizeField));
 
             // when to update brush
             EditorSystem.Local.OnSelectedTileChanged += (_, _) =>
@@ -83,7 +83,7 @@ namespace TerrariaInGameWorldEditor.Content.Tools
 
         public override string GetInfoText()
         {
-            return $"[c/EAD87A:Y Difference:] {_yDiff}, [c/EAD87A:X Difference:] {_xDiff}";
+            return LocalizationUtils.GetTextValue("Tools.LineTool.InfoText", _yDiff, _xDiff);
         }
 
         private void UpdateBrush()

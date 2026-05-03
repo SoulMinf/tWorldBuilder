@@ -6,6 +6,7 @@ using Terraria.Audio;
 using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader;
 using Terraria.UI;
+using TerrariaInGameWorldEditor.Common.Utils;
 using TerrariaInGameWorldEditor.UIElements.Button;
 using TerrariaInGameWorldEditor.UIElements.ImageResizeable;
 
@@ -85,7 +86,7 @@ namespace TerrariaInGameWorldEditor.Editor.Windows
             // x button
             _xButton = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/General/XButton"));
             _xButton.SetVisibility(0.8f, 1);
-            _xButton.HoverText = "Close";
+            _xButton.HoverText = LocalizationUtils.GetTextValue("Windows.General.HoverText.Close");
             _xButton.Width.Set(26, 0);
             _xButton.Height.Set(26, 0);
             _xButton.Left.Set(-_xButton.Width.Pixels - 6, 1);

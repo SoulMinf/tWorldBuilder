@@ -1,26 +1,387 @@
 Keybinds: {
-	"Open Editor.DisplayName": Open  Editor
-	"Special Key.DisplayName": Special  Key
-	"Key 1.DisplayName": Key 1
-	Delete.DisplayName: Delete
-	"Copy (Key 1 + selected key).DisplayName": Copy ( Key 1 + selected key)
-	"Paste (Key 1 + selected key).DisplayName": Paste ( Key 1 + selected key)
-	"Cut (Key 1 + selected key).DisplayName": Cut ( Key 1 + selected key)
-	"Undo (Key 1 + selected key).DisplayName": Undo ( Key 1 + selected key)
-	"Redo (Key 1 + selected key.DisplayName": Redo ( Key 1 + selected key
-	"Change Paste Corner (Key 1 + selected key).DisplayName": Change  Paste  Corner ( Key 1 + selected key)
-	"Rotate selection (Key 1 + selected key).DisplayName": Rotate selection ( Key 1 + selected key)
-	"Mirror selection (Key 1 + selected key).DisplayName": Mirror selection ( Key 1 + selected key)
-	"Save (Key 1 + selected key.DisplayName": Save ( Key 1 + selected key
-	"Delete (Ctrl + Key).DisplayName": Delete ( Ctrl +  Key)
-	"Copy (Ctrl + Key).DisplayName": Copy ( Ctrl +  Key)
-	"Paste (Ctrl + Key).DisplayName": Paste ( Ctrl +  Key)
-	"Change Paste Corner (Ctrl + Key).DisplayName": Change  Paste  Corner ( Ctrl +  Key)
-	"Rotate selection (Ctrl + Key).DisplayName": Rotate selection ( Ctrl +  Key)
-	"Mirror selection (Ctrl + Key).DisplayName": Mirror selection ( Ctrl +  Key)
-	"Cut (Ctrl + Key).DisplayName": Cut ( Ctrl +  Key)
-	"Undo (Ctrl + Key).DisplayName": Undo ( Ctrl +  Key)
-	"Redo (Ctrl + Key).DisplayName": Redo ( Ctrl +  Key)
-	"Save (Ctrl + Key).DisplayName": Save ( Ctrl +  Key)
-	"Move faster in editor.DisplayName": Move faster in editor
+	OpenEditor.DisplayName: Open editor
+	Delete.DisplayName: Delete (Ctrl + Key)
+	Copy.DisplayName: Copy (Ctrl + Key)
+	Paste.DisplayName: Paste (Ctrl + Key)
+	ChangeCorner.DisplayName: Change paste corner (Ctrl + Key)
+	RotateSelection.DisplayName: Rotate selection (Ctrl + Key)
+	MirrorSelection.DisplayName: Mirror selection (Ctrl + Key)
+	Cut.DisplayName: Cut (Ctrl + Key)
+	Undo.DisplayName: Undo (Ctrl + Key)
+	Redo.DisplayName: Redo (Ctrl + Key)
+	Save.DisplayName: Save (Ctrl + Key)
+	MoveFaster.DisplayName: Move faster in editor
+}
+
+Windows: {
+	Blueprints: {
+		Title: Blueprints
+
+		HoverText: {
+			OpenFolder: Open save folder
+			CreateFolder: Create new folder
+			Refresh: Refresh
+		}
+
+		FieldText.Search: Search for files... [c/60ABE7:({0})]
+		Messages.Loaded: Set clipboard to "{0}"
+
+		Exceptions: {
+			MissingMods: Missing mods needed to load file:
+			LoadFailed: Failed to load selected file.
+		}
+	}
+
+	Masks: {
+		Title: Masks
+
+		Sections: {
+			Modify: Draw/paste/modify:
+			ModifyOn: Draw/paste on tiles with:
+		}
+
+		LabelText: {
+			Tiles: Tiles
+			Walls: Walls
+			Liquid: Liquid
+			Wires: Wires/Actuators
+			Empty: Empty tiles
+		}
+
+		Options: {
+			Yes: Yes
+			Any: Any
+			No: No
+		}
+	}
+
+	Save: {
+		Title: Save
+
+		HoverText: {
+			SelectPath: Select folder
+			ResetPath: Reset to default
+		}
+
+		LabelText: {
+			SaveAs: Save selection as:
+			Save: Save
+			Path: Path:
+		}
+
+		FieldText: {
+			SaveAs: Enter file name...
+			CustomPath: ...\{0} [c/F3CD5A:(custom)]
+			DefaultPath: ...\saves [c/60ABE7:(default)]
+		}
+
+		Exceptions: {
+			FolderMissing: The folder you're trying to save to doesn't exist anymore, maybe you renamed or deleted it?
+			FileExists: Failed to save, a file with that name already exists.
+			SaveFailed: Failed to save current selection.
+		}
+	}
+
+	SelectFolder: {
+		Title: (Save) Select Folder
+
+		HoverText: {
+			OpenFolder: Open save folder
+			CreateFolder: Create new folder
+			Refresh: Refresh
+		}
+
+		FieldText.Search: Search for folders... [c/60ABE7:({0})]
+	}
+
+	Settings: {
+		Title: Settings
+
+		Categories: {
+			EditorSettings: Editor settings
+			ToolSettings: Tool settings
+			Messages: Messages
+		}
+
+		Settings: {
+			ForceScale: Force editor UI scale:
+			Scale: Scale:
+			Theme: Theme:
+			PrimaryColor: Primary color
+			SecondaryColor: Secondary color
+			TeleportToEditor: Teleport to editor location when closing editor:
+			Fullbright: Fullbright enabled:
+			SelectionActiveText: Show text for when a selection area is active:
+			MaxUndoRedo: Max undo/redo actions to keep in memory:
+			UpdateTiles: Update drawn/pasted tiles:
+			ToolColor: Tool color:
+			CenterLines: Add center lines to selection:
+			MeasuringLines: Show measuring lines:
+			EditorMessages: Should write editor messages in chat.
+			WarnMessages: Should write warn messages in chat.
+			ErrorMessages: Should write error messages in chat.
+		}
+
+		Options: {
+			Themes: {
+				Default: Default
+				Custom: Custom
+			}
+		}
+	}
+
+	TileSelector: {
+		Title: Tile selector
+
+		HoverText: {
+			TileProperties:
+				'''
+				[c/EAD87A:Note:] Modifying some values may 
+				cause problems. Be careful.
+				'''
+			TileInfo:
+				'''
+				[c/EAD87A:Note:] Will default to the top left part on 
+				tiles bigger than 1x1. Might not always work.
+				'''
+			TileItem:
+				'''
+				{0}
+				[c/EAD87A:Left click] to update and reset properties.
+				[c/EAD87A:Right click] to only update tile/wall type.
+				'''
+		}
+
+		LabelText: {
+			Preview: Preview:
+			Confirm: Confirm
+		}
+
+		FieldText: {
+			Properties: Search for properties...
+			Tiles: Search for tiles...
+			Search: Search for tiles... [c/60ABE7:({0})]
+		}
+	}
+
+	General.HoverText.Close: Close
+}
+
+Editor: {
+	UI: {
+		HoverText: {
+			Close: Close
+			Settings: Settings
+			Blueprints: Blueprints
+			Save: Save
+			Masks: Masks
+			Palette: Add to current palette
+			Undo: Undo
+			Redo: Redo
+			TileBrowser: Tile selector
+			Delete: Delete
+			FinishDelete: Finish deleting
+			Clear: Clear
+		}
+
+		Notes.SelectionActive:
+			'''
+			[c/EAD87A:Note:] A selection is active.
+			Drawing/Pasting/Modifying tiles is limited to the selection area.
+
+			'''
+	}
+
+	System: {
+		Messages: {
+			LanguageChange: Restart/reload the mod for language changes to take effect.
+			Undo: Undid.
+			UndoEmpty: Nothing left to undo.
+			Redo: Redid.
+			RedoEmpty: Nothing left to redo.
+			Copy: Copied.
+			PasteStart: Paste tool opened. Press Ctrl + {0} again to paste.
+			PasteEmpty: Nothing in clipboard.
+			Cut: Cut.
+			Delete: Deleted.
+		}
+
+		Exceptions: {
+			ILDrawPlayerChat: Error IL editing DrawPlayerChat.
+			ILDrawChat: Error IL editing DrawChat.
+		}
+	}
+}
+
+ModPlayer.Messages.NoKeybindSet: Looks like you're missing a keybind for tWorldBuilder, set up some keybinds in the settings to start using the mod.
+
+UIElements: {
+	DirectoryFolder.HoverText: Create new folder
+
+	DirectoryItem: {
+		HoverText: {
+			Delete: Delete
+			ConfirmDelete: Confirm delete
+			Rename: Rename
+			ConfirmRename: Confirm rename
+			Select: Select
+		}
+
+		Exceptions.RenameFail: Failed to rename, a file or folder with that name likely already exist.
+	}
+
+	TextField.PlaceholderText: Enter text...
+
+	Utils: {
+		Exceptions: {
+			SetThemeFail: Failed to set spritebatch to theme.
+			SetNormalFail: Failed to set spritebatch to normal.
+		}
+	}
+}
+
+Mod: {
+	Warning: Warning
+	Error: Error
+}
+
+Tools: {
+	MagicWandTool: {
+		HoverText:
+			'''
+			Magic Wand 
+			[c/EAD87A:Right Mouse:] Remove selection 
+			[c/EAD87A:Left Mouse:] New selection 
+			[c/EAD87A:Ctrl + Left Mouse:] Add to selection 
+			[c/EAD87A:Shift + Left Mouse:] Remove from selection
+			'''
+		InfoText: "[c/EAD87A:Tile count:] {0}"
+	}
+
+	BoxSelectionTool: {
+		HoverText:
+			'''
+			Box Selection 
+			[c/EAD87A:Right Mouse:] Remove selection 
+			[c/EAD87A:Left Mouse:] New selection
+			'''
+		InfoText: "[c/EAD87A:Width:] {0}, [c/EAD87A:Height:] {1}"
+	}
+
+	BrushTool: {
+		HoverText:
+			'''
+			Brush 
+			[c/EAD87A:Ctrl + Scroll:] Change size by 1 
+			[c/EAD87A:Ctrl + Shift + Scroll:] Change size by 10
+			'''
+
+		Settings: {
+			Size: Size:
+			Mode: Mode:
+		}
+
+		Options: {
+			Modes: {
+				SelectedTile: Selected Tile
+				Clipboard: Clipboard
+			}
+		}
+	}
+
+	EraseTool.HoverText:
+		'''
+		Eraser 
+		[c/EAD87A:Ctrl + Scroll:] Change size by 1 
+		[c/EAD87A:Ctrl + Shift + Scroll:] Change size by 10
+		'''
+
+	FillTool: {
+		Settings: {
+			TileCap: Tile cap:
+			CornerConnect: Include tiles connected at corners:
+			Target: Target:
+		}
+
+		Options: {
+			Targets: {
+				Auto: Auto
+				Tiles: Tiles/Air
+				Walls: Walls
+				Liquid: Liquid
+			}
+		}
+
+		Messages.AreaTooBig: Area too big to select.
+	}
+
+	LassoTool: {
+		HoverText:
+			'''
+			Lasso 
+			[c/EAD87A:Right Mouse:] Remove selection 
+			[c/EAD87A:Left Mouse:] New selection 
+			[c/EAD87A:Ctrl + Left Mouse:] Add to selection 
+			[c/EAD87A:Shift + Left Mouse:] Remove from selection
+			'''
+		InfoText: "[c/EAD87A:Tile count:] {0}"
+	}
+
+	LineTool: {
+		HoverText:
+			'''
+			Line 
+			[c/EAD87A:Ctrl + Scroll:] Change size by 1 
+			[c/EAD87A:Ctrl + Shift + Scroll:] Change size by 10
+			'''
+		InfoText: "[c/EAD87A:Y Difference:] {0}, [c/EAD87A:X Difference:] {1}"
+
+		Settings: {
+			Size: Size:
+			Mode: Mode:
+		}
+
+		Options: {
+			Modes: {
+				SelectedTile: Selected Tile
+				Clipboard: Clipboard
+			}
+		}
+	}
+
+	PaintBucketTool.HoverText: Paint Bucket
+
+	PasteTool: {
+		InfoText: "[c/EAD87A:Tile count:] {0}"
+		Messages.Pasted: Pasted.
+	}
+
+	ShapesTool: {
+		HoverText:
+			'''
+			Shapes 
+			[c/EAD87A:Ctrl + Scroll:] Change size by 1 
+			[c/EAD87A:Ctrl + Shift + Scroll:] Change size by 10
+			'''
+		InfoText: "[c/EAD87A:Width:] {0}, [c/EAD87A:Height:] {1}"
+
+		Settings: {
+			Size: Size:
+			Type: Shape type:
+		}
+
+		Options: {
+			ShapeTypes: {
+				Rectangle: Rectangle
+				FilledRectangle: Filled Rectangle
+				Circle: Circle
+				FilledCircle: Filled Circle
+			}
+		}
+	}
+
+	TilePickerTool: {
+		HoverText: Tile Picker
+		InfoText: "[c/EAD87A:Target Tile Type:] {0} ([c/EAD87A:ID:] {1}), [c/EAD87A:Target Wall Type:] {2} ([c/EAD87A:ID:] {3})"
+	}
 }

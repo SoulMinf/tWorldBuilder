@@ -16,12 +16,12 @@ namespace TerrariaInGameWorldEditor.Content.Tools
         public TilePickerTool()
         {
             ToggleToolButton = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/Tools/TilePickerTool"));
-            ToggleToolButton.HoverText = "Tile Picker";
+            ToggleToolButton.HoverText = LocalizationUtils.GetTextValue("Tools.TilePickerTool.HoverText");
         }
 
         public override string GetInfoText()
         {
-            return $"[c/EAD87A:Target Tile Type:] {(Main.tile[Player.tileTargetX, Player.tileTargetY].HasTile ? TileID.Search.GetName(Main.tile[Player.tileTargetX, Player.tileTargetY].TileType) : "Air")} ([c/EAD87A:ID:] {Main.tile[Player.tileTargetX, Player.tileTargetY].TileType}), [c/EAD87A:Target Wall Type:] {(Main.tile[Player.tileTargetX, Player.tileTargetY].WallType != WallID.None ? WallID.Search.GetName(Main.tile[Player.tileTargetX, Player.tileTargetY].WallType) : "None")} ([c/EAD87A:ID:] {Main.tile[Player.tileTargetX, Player.tileTargetY].WallType})";
+            return LocalizationUtils.GetTextValue("Tools.TilePickerTool.InfoText", (Main.tile[Player.tileTargetX, Player.tileTargetY].HasTile ? TileID.Search.GetName(Main.tile[Player.tileTargetX, Player.tileTargetY].TileType) : "Air"), Main.tile[Player.tileTargetX, Player.tileTargetY].TileType, (Main.tile[Player.tileTargetX, Player.tileTargetY].WallType != WallID.None ? WallID.Search.GetName(Main.tile[Player.tileTargetX, Player.tileTargetY].WallType) : "None"), Main.tile[Player.tileTargetX, Player.tileTargetY].WallType);
         }
 
         public override void Draw(SpriteBatch spriteBatch)

@@ -38,6 +38,7 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.Settings
         public Mask ShouldPasteOnLiquid { get; set; }
         public Mask ShouldPasteOnWires { get; set; }
 
+        // no localization here for now since this happens before we can actually send stuff to the chat
         public static TIGWESettings Load(string path)
         {
             try

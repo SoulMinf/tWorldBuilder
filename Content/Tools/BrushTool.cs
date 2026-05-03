@@ -37,13 +37,13 @@ namespace TerrariaInGameWorldEditor.Content.Tools
         public BrushTool()
         {
             ToggleToolButton = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/Tools/BrushTool"));
-            ToggleToolButton.HoverText = "Brush \n[c/EAD87A:Ctrl + Scroll:] Change size by 1 \n[c/EAD87A:Ctrl + Shift + Scroll:] Change size by 10";
+            ToggleToolButton.HoverText = LocalizationUtils.GetTextValue("Tools.BrushTool.HoverText");
 
             // settings
             // mode
             _modeDropDown = new TIGWEDropDown<BrushMode>();
-            _modeDropDown.AddOption(BrushMode.SelectedTile, "Selected Tile");
-            _modeDropDown.AddOption(BrushMode.Clipboard, "Clipboard");
+            _modeDropDown.AddOption(BrushMode.SelectedTile, LocalizationUtils.GetTextValue("Tools.BrushTool.Options.Modes.SelectedTile"));
+            _modeDropDown.AddOption(BrushMode.Clipboard, LocalizationUtils.GetTextValue("Tools.BrushTool.Options.Modes.Clipboard"));
             _modeDropDown.OnOptionChanged += (option) =>
             {
                 _mode = option.Value;
@@ -51,7 +51,7 @@ namespace TerrariaInGameWorldEditor.Content.Tools
             };
             _modeDropDown.Height.Set(26, 0f);
             _modeDropDown.Width.Set(140, 0f);
-            Settings.Add(("Mode:", _modeDropDown));
+            Settings.Add((LocalizationUtils.GetTextValue("Tools.BrushTool.Settings.Mode"), _modeDropDown));
 
             // size
             _sizeField = new TIGWENumberField(4, 100, 1);
@@ -63,7 +63,7 @@ namespace TerrariaInGameWorldEditor.Content.Tools
             };
             _sizeField.Width.Set(60, 0);
             _sizeField.Height.Set(26, 0);
-            Settings.Add(("Size:", _sizeField));
+            Settings.Add((LocalizationUtils.GetTextValue("Tools.BrushTool.Settings.Size"), _sizeField));
 
             // when to update brush
             EditorSystem.Local.OnSelectedTileChanged += (_, _) =>

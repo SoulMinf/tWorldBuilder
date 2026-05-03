@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.ModLoader;
@@ -15,7 +14,7 @@ namespace TerrariaInGameWorldEditor.Content.Tools
         public PaintBucketTool()
         {
             ToggleToolButton = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/Tools/PaintBucketTool"));
-            ToggleToolButton.HoverText = "Paint Bucket";
+            ToggleToolButton.HoverText = LocalizationUtils.GetTextValue("Tools.PaintBucketTool.HoverText");
         }
 
         public override void Draw(SpriteBatch spriteBatch)

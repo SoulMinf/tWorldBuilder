@@ -1,15 +1,11 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
-using Terraria;
 using Terraria.GameContent.UI.Elements;
-using Terraria.ID;
 using Terraria.ModLoader;
-using Terraria.ModLoader.IO;
 using TerrariaInGameWorldEditor.Common;
+using TerrariaInGameWorldEditor.Common.Utils;
 using TerrariaInGameWorldEditor.UIElements.Button;
 using TerrariaInGameWorldEditor.UIElements.ButtonResizable;
 using TerrariaInGameWorldEditor.UIElements.TextField;
@@ -31,14 +27,14 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.Save
             // main area
             Height.Set(168, 0);
             Width.Set(330, 0);
-            _defaultTitle = "Save";
+            _defaultTitle = LocalizationUtils.GetTextValue("Windows.Save.Title");
 
             // save as
-            UIText saveAsText = new UIText("Save selection as:");
+            UIText saveAsText = new UIText(LocalizationUtils.GetTextValue("Windows.Save.LabelText.SaveAs"));
             saveAsText.Top.Set(44, 0);
             saveAsText.Left.Set(6, 0);
             Append(saveAsText);
-            _saveAsField = new TIGWETextField("Enter file name...", 50);
+            _saveAsField = new TIGWETextField(LocalizationUtils.GetTextValue("Windows.Save.FieldText.SaveAs"), 50);
             _saveAsField.Height.Set(26, 0);
             _saveAsField.Width.Set(250, 0);
             _saveAsField.Top.Set(saveAsText.Top.Pixels + 18, 0);
@@ -46,7 +42,7 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.Save
             Append(_saveAsField);
 
             // path
-            UIText pathText = new UIText("Path:");
+            UIText pathText = new UIText(LocalizationUtils.GetTextValue("Windows.Save.LabelText.Path"));
             pathText.Top.Set(_saveAsField.Top.Pixels + _saveAsField.Height.Pixels + 6, 0);
             pathText.Left.Set(6, 0);
             Append(pathText);
@@ -66,7 +62,7 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.Save
             pathSelect.Top.Set(_pathField.Top.Pixels, 0);
             pathSelect.Width.Set(26, 0);
             pathSelect.Height.Set(26, 0);
-            pathSelect.HoverText = "Select folder";
+            pathSelect.HoverText = LocalizationUtils.GetTextValue("Windows.Save.HoverText.SelectPath");
             pathSelect.OnLeftClick += (_, _) => SelectPath();
             Append(pathSelect);
 
@@ -77,13 +73,13 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.Save
             pathReset.Top.Set(_pathField.Top.Pixels, 0);
             pathReset.Width.Set(26, 0);
             pathReset.Height.Set(26, 0);
-            pathReset.HoverText = "Reset to default";
+            pathReset.HoverText = LocalizationUtils.GetTextValue("Windows.Save.HoverText.ResetPath");
             pathReset.OnLeftClick += (_, _) => ResetPath();
             Append(pathReset);
 
             // save button
             _saveButton = new TIGWEImageButtonResizeable(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/General/Texture"));
-            _saveButton.Text = "Save";
+            _saveButton.Text = LocalizationUtils.GetTextValue("Windows.Save.LabelText.Save");
             _saveButton.TextureHover = ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/General/TextureHover");
             _saveButton.Left.Set(6, 0);
             _saveButton.Top.Set(_pathField.Top.Pixels + _pathField.Height.Pixels + 2, 0);
@@ -129,7 +125,7 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.Save
                 _selectFolderUI.OnSelectFolder += (folder) =>
                 {
                     _selectedPath = folder.FullPath;
-                    _pathField?.SetText($"...\\{folder.Name} [c/F3CD5A:(custom)]");
+                    _pathField?.SetText(LocalizationUtils.GetTextValue("Windows.Save.FieldText.CustomPath", folder.Name));
                     _selectFolderUI.Visible = false;
                 };
                 TIGWEUISystem.Local.RegisterUI(_selectFolderUI);
@@ -140,7 +136,7 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.Save
         private void ResetPath()
         {
             _selectedPath = $"{ModLoader.ModPath.Replace("\\Mods", "")}\\{TerrariaInGameWorldEditor.MODNAME}\\saves";
-            _pathField?.SetText($"...\\saves [c/60ABE7:(default)]");
+            _pathField?.SetText(LocalizationUtils.GetTextValue("Windows.Save.FieldText.DefaultPath"));
         }
 
         private void SaveToFile()
@@ -154,12 +150,12 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.Save
                 string path = $"{_selectedPath}\\{name}.twb";
                 if (!Path.Exists(_selectedPath))
                 {
-                    TerrariaInGameWorldEditor.Warn($"The folder you're trying to save to doesn't exist anymore, maybe you renamed or deleted it?");
+                    TerrariaInGameWorldEditor.Warn(LocalizationUtils.GetTextValue("Windows.Save.Exceptions.FolderMissing"));
                     return;
                 }
                 if (File.Exists(path))
                 {
-                    TerrariaInGameWorldEditor.Warn($"Failed to save, a file with that name already exists.");
+                    TerrariaInGameWorldEditor.Warn(LocalizationUtils.GetTextValue("Windows.Save.Exceptions.FileExists"));
                     return;
                 }
                 WriteTwbFile(path, EditorSystem.Local.CurrentSelection);
@@ -170,7 +166,7 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.Save
             }
             catch (Exception ex)
             {
-                TerrariaInGameWorldEditor.Warn("Failed to save current selection.", ex);
+                TerrariaInGameWorldEditor.Warn(LocalizationUtils.GetTextValue("Windows.Save.Exceptions.SaveFailed"), ex);
             }
         }
 

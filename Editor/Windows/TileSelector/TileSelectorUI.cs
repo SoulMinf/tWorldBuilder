@@ -34,9 +34,9 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.TileSelector
             base.OnInitialize();
             Width.Set(700, 0);
             Height.Set(440, 0);
-            _defaultTitle = "Tile Selector";
+            _defaultTitle = LocalizationUtils.GetTextValue("Windows.TileSelector.Title");
 
-            UIText preview = new UIText("Preview:");
+            UIText preview = new UIText(LocalizationUtils.GetTextValue("Windows.TileSelector.LabelText.Preview"));
             preview.Top.Set(45, 0);
             preview.Left.Set(6, 0);
             Append(preview);
@@ -47,7 +47,7 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.TileSelector
                 OnTileConfirmed?.Invoke(this, _currentTileCopy);
                 Visible = false;
             };
-            confirmBtn.Text = "Confirm";
+            confirmBtn.Text = LocalizationUtils.GetTextValue("Windows.TileSelector.LabelText.Confirm");
             confirmBtn.Left.Set(6, 0);
             confirmBtn.Top.Set(64, 0);
             confirmBtn.Height.Set(26, 0);
@@ -109,7 +109,7 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.TileSelector
             propertiesGrid.Width.Set(propertiesGridBorder.Width.Pixels - 12, 0);
             propertiesGrid.Height.Set(propertiesGridBorder.Height.Pixels - 12, 0);
             border.Append(propertiesGrid);
-            TIGWETextField tilePropertiesSearchBar = new TIGWETextField($"Search for properties...", 100);
+            TIGWETextField tilePropertiesSearchBar = new TIGWETextField(LocalizationUtils.GetTextValue("Windows.TileSelector.FieldText.Properties"), 100);
             tilePropertiesSearchBar.ShowSearchIcon = true;
             tilePropertiesSearchBar.Width.Set(propertiesGridBorder.Width.Pixels - 28, 0);
             tilePropertiesSearchBar.Height.Set(26, 0);
@@ -123,7 +123,7 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.TileSelector
             propertiesScrollbar.Width.Set(20, 0);
             border.Append(propertiesScrollbar);
             TIGWEButton tilePropertiesInfoButton = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/EditorWindows/InfoButton"));
-            tilePropertiesInfoButton.HoverText = "[c/EAD87A:Note:] Modifying some values may \n cause problems. Be careful.";
+            tilePropertiesInfoButton.HoverText = LocalizationUtils.GetTextValue("Windows.TileSelector.HoverText.TileProperties");
             tilePropertiesInfoButton.SetVisibility(0.7f, 1);
             tilePropertiesInfoButton.SetHoverImage(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/EditorWindows/InfoButtonHover"));
             tilePropertiesInfoButton.Width.Set(26, 0);
@@ -163,7 +163,7 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.TileSelector
             tileGrid.Width.Set(tileGridBorder.Width.Pixels - 12, 0);
             tileGrid.Height.Set(tileGridBorder.Height.Pixels - 12, 0);
             border.Append(tileGrid);
-            TIGWETextField tileSearchBar = new TIGWETextField($"Search for tiles...", 100);
+            TIGWETextField tileSearchBar = new TIGWETextField(LocalizationUtils.GetTextValue("Windows.TileSelector.FieldText.Tiles"), 100);
             tileSearchBar.ShowSearchIcon = true;
             tileSearchBar.Width.Set(tileGridBorder.Width.Pixels - 28, 0);
             tileSearchBar.Height.Set(26, 0);
@@ -177,7 +177,7 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.TileSelector
             tileScrollbar.Width.Set(20, 0);
             border.Append(tileScrollbar);
             TIGWEButton tileInfoButton = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/EditorWindows/InfoButton"));
-            tileInfoButton.HoverText = "[c/EAD87A:Note:] Will default to the top left part on \ntiles bigger than 1x1. Might not always work.";
+            tileInfoButton.HoverText = LocalizationUtils.GetTextValue("Windows.TileSelector.HoverText.TileInfo");
             tileInfoButton.SetVisibility(0.7f, 1);
             tileInfoButton.SetHoverImage(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/EditorWindows/InfoButtonHover"));
             tileInfoButton.Width.Set(26, 0);
@@ -213,11 +213,11 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.TileSelector
                         _currentTileCopy.WallFrameY = tc.WallFrameY;
                         SetCurrentTileCopy(_currentTileCopy);
                     };
-                    tileItem.HoverText = $"{tileItem.Name}\n[c/EAD87A:Left click] to update and reset properties.\n[c/EAD87A:Right click] to only update tile/wall type.";
+                    tileItem.HoverText = LocalizationUtils.GetTextValue("Windows.TileSelector.HoverText.TileItem", tileItem.Name);
                 }
             }
             tileGrid.AddRange(items);
-            tileSearchBar.PlaceholderText = $"Search for tiles... [c/60ABE7:({tileGrid.AllItems.Count})]";
+            tileSearchBar.PlaceholderText = LocalizationUtils.GetTextValue("Windows.TileSelector.FieldText.Search", tileGrid.AllItems.Count);
 
             // add tile properties
             _properties = new List<TileSelectorProperty>();

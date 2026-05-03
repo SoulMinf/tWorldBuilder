@@ -35,7 +35,7 @@ namespace TerrariaInGameWorldEditor.Content.Tools
         public BoxSelectionTool()
         {
             ToggleToolButton = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/Tools/SelectTool"));
-            ToggleToolButton.HoverText = "Box Selection \n[c/EAD87A:Right Mouse:] Remove selection \n[c/EAD87A:Left Mouse:] New selection";
+            ToggleToolButton.HoverText = LocalizationUtils.GetTextValue("Tools.BoxSelectionTool.HoverText");
             _selection = new TileCollection();
         }
 
@@ -52,8 +52,7 @@ namespace TerrariaInGameWorldEditor.Content.Tools
                 }
                 selection = ToolUtils.GetRectangleFromPoints(_point1, _point2);
             }
-
-            return $"[c/EAD87A:Width:] {selection.Width}, [c/EAD87A:Height:] {selection.Height}";
+            return LocalizationUtils.GetTextValue("Tools.BoxSelectionTool.InfoText", _selection.GetHeight(), _selection.GetWidth());
         }
 
         public void ResetSelection()

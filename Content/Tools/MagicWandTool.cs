@@ -4,6 +4,7 @@ using Terraria;
 using Terraria.GameInput;
 using Terraria.ModLoader;
 using TerrariaInGameWorldEditor.Common;
+using TerrariaInGameWorldEditor.Common.Utils;
 using TerrariaInGameWorldEditor.UIElements.Button;
 
 namespace TerrariaInGameWorldEditor.Content.Tools
@@ -15,7 +16,7 @@ namespace TerrariaInGameWorldEditor.Content.Tools
         public MagicWandTool()
         {
             ToggleToolButton = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/Tools/MagicWandTool"));
-            ToggleToolButton.HoverText = "Magic Wand \n[c/EAD87A:Right Mouse:] Remove selection \n[c/EAD87A:Left Mouse:] New selection \n[c/EAD87A:Ctrl + Left Mouse:] Add to selection \n[c/EAD87A:Shift + Left Mouse:] Remove from selection";
+            ToggleToolButton.HoverText = LocalizationUtils.GetTextValue("Tools.MagicWandTool.HoverText");
             _selection = new TileCollection();
         }
 
@@ -31,7 +32,7 @@ namespace TerrariaInGameWorldEditor.Content.Tools
 
         public override string GetInfoText()
         {
-            return $"[c/EAD87A:Count:] {_selection.Count}";
+            return LocalizationUtils.GetTextValue("Tools.MagicWandTool.InfoText", _selection.Count);
         }
 
         protected override void OnFill(TileCollection tiles)

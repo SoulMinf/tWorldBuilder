@@ -1,9 +1,8 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
-using System.IO;
 using Terraria.ModLoader;
 using Terraria.UI;
-using TerrariaInGameWorldEditor.UIElements;
+using TerrariaInGameWorldEditor.Common.Utils;
 using TerrariaInGameWorldEditor.UIElements.Button;
 
 namespace TerrariaInGameWorldEditor.UIElements.DirectoryGrid
@@ -30,8 +29,8 @@ namespace TerrariaInGameWorldEditor.UIElements.DirectoryGrid
             _createSubFolderButton.SetVisibility(0.8f, 1f);
             _createSubFolderButton.Width.Set(26, 0);
             _createSubFolderButton.Height.Set(26, 0);
-            _createSubFolderButton.HoverText = "Create new folder";
-            _createSubFolderButton.OnLeftClick += (_, _) => CreateDirectory();
+            _createSubFolderButton.HoverText = LocalizationUtils.GetTextValue("UIElements.DirectoryFolder.HoverText");
+            _createSubFolderButton.OnLeftClick += (_, _) => _parentGrid.CreateNewDirectory(pathFromSaves);
             Append(_createSubFolderButton);
         }
 
@@ -45,34 +44,6 @@ namespace TerrariaInGameWorldEditor.UIElements.DirectoryGrid
         {
             FolderContent.Remove(item);
             item.AssignParentFolder(null);
-        }
-
-        private void CreateDirectory()
-        {
-            // make sure we dont try to create a file with the same name as another one
-            int num = 1;
-            while (Directory.Exists($"{FullPath}\\New Folder ({num})"))
-            {
-                num++;
-            }
-
-            // create the directory and UIDirectoryFolder
-            Directory.CreateDirectory($"{FullPath}\\New Folder ({num})");
-            TIGWEDirectoryFolder folder = new TIGWEDirectoryFolder($"{FullPath}\\New Folder ({num})");
-            folder.CanSelect = CanSelect;
-            folder.AssignParentGrid(_parentGrid);
-
-            // add item and open to show the new folder
-            AddContentChild(folder);
-            Open();
-
-            // goto that element in the grid so we can see what we're naming it
-            _parentGrid.Goto((element) => {
-                return ((TIGWEDirectoryItem)element).FullPath.Equals(folder.FullPath);
-            }, true);
-
-            // initialize the renaming
-            folder.StartRename();
         }
 
         public void RecalculateChildrenPaths()

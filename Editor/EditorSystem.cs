@@ -10,6 +10,7 @@ using Terraria.GameContent.Creative;
 using Terraria.GameContent.UI.Chat;
 using Terraria.GameInput;
 using Terraria.ID;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
 using TerrariaInGameWorldEditor.Common;
@@ -156,18 +157,8 @@ namespace TerrariaInGameWorldEditor.Editor
         // settings
         public TIGWESettings Settings { get; private set; }
 
-        public override void OnModLoad()
-        {
-            base.OnModLoad();
-            if (!Main.dedServ)
-            {
-                Local = this;
-                _pasteTool = new PasteTool();
-                Tools = new List<Tool> { new BrushTool(), new EraseTool(), new LineTool(), new ShapesTool(), new PaintBucketTool(), new TilePickerTool(), new BoxSelectionTool(), new MagicWandTool(), new LassoTool() };
-                Settings = new TIGWESettings(); // just some default settings to use so settings arent null during load
-                Settings = TIGWESettings.Load($"{ModLoader.ModPath.Replace("\\Mods", "")}\\{TerrariaInGameWorldEditor.MODNAME}\\settings");
-            }
-        }
+        // language
+        public bool LanguageChange { get; set; } = false;
 
         public override void OnModUnload()
         {
@@ -194,12 +185,17 @@ namespace TerrariaInGameWorldEditor.Editor
 
             if (!Main.dedServ)
             {
+                Local = this;
+                _pasteTool = new PasteTool();
+                Tools = new List<Tool> { new BrushTool(), new EraseTool(), new LineTool(), new ShapesTool(), new PaintBucketTool(), new TilePickerTool(), new BoxSelectionTool(), new MagicWandTool(), new LassoTool() };
+                Settings = new TIGWESettings(); // just some default settings to use so settings arent null during load
+                Settings = TIGWESettings.Load($"{ModLoader.ModPath.Replace("\\Mods", "")}\\{TerrariaInGameWorldEditor.MODNAME}\\settings");
+
                 // ui stuff
                 _mainUIState = new EditorUI();
                 _mainUIState.Activate();
                 _mainUserInterface = new UserInterface();
                 _selectTileUIState = new TileSelectorUI();
-                _selectTileUIState.Title = "(Selected Tile) Tile Selector";
                 _selectTileUIState.OnTileConfirmed += (_, tileCopy) =>
                 {
                     SelectedTile = tileCopy;
@@ -219,6 +215,11 @@ namespace TerrariaInGameWorldEditor.Editor
                 // smart cursor kinda messes with the drawing/pasting since the tools use tileTargetX/Y
                 // so we want to make sure its always off when the editor is open
                 On_Player.TryToToggleSmartCursor += DisableSmartCursor;
+                On_LanguageManager.ReloadLanguage += (On_LanguageManager.orig_ReloadLanguage orig, LanguageManager self, bool resetValuesToKeysFirst) =>
+                {
+                    LanguageChange = true;
+                    orig(self, resetValuesToKeysFirst);
+                };
             }
 
             // default
@@ -258,7 +259,7 @@ namespace TerrariaInGameWorldEditor.Editor
             catch (Exception ex)
             {
                 MonoModHooks.DumpIL(ModContent.GetInstance<TerrariaInGameWorldEditor>(), il);
-                TerrariaInGameWorldEditor.Error("Error IL editing DrawPlayerChat.", ex);
+                TerrariaInGameWorldEditor.Error(LocalizationUtils.GetTextValue("Editor.System.Exceptions.ILDrawPlayerChat"), ex);
             }
         }
 
@@ -278,7 +279,7 @@ namespace TerrariaInGameWorldEditor.Editor
             catch (Exception ex)
             {
                 MonoModHooks.DumpIL(ModContent.GetInstance<TerrariaInGameWorldEditor>(), il);
-                TerrariaInGameWorldEditor.Error("Error IL editing DrawChat.", ex);
+                TerrariaInGameWorldEditor.Error(LocalizationUtils.GetTextValue("Editor.System.Exceptions.ILDrawChat"), ex);
             }
         }
 
@@ -386,11 +387,11 @@ namespace TerrariaInGameWorldEditor.Editor
                     if (_undoHistory.Count > 0)
                     {
                         Undo();
-                        TerrariaInGameWorldEditor.NewText($"Undid.");
+                        TerrariaInGameWorldEditor.NewText(LocalizationUtils.GetTextValue("Editor.System.Messages.Undo"));
                     }
                     else
                     {
-                        TerrariaInGameWorldEditor.NewText($"Nothing left to undo.");
+                        TerrariaInGameWorldEditor.NewText(LocalizationUtils.GetTextValue("Editor.System.Messages.UndoEmpty"));
                     }
                 }
 
@@ -400,11 +401,11 @@ namespace TerrariaInGameWorldEditor.Editor
                     if (_redoHistory.Count > 0)
                     {
                         Redo();
-                        TerrariaInGameWorldEditor.NewText($"Redid.");
+                        TerrariaInGameWorldEditor.NewText(LocalizationUtils.GetTextValue("Editor.System.Messages.Redo"));
                     }
                     else
                     {
-                        TerrariaInGameWorldEditor.NewText($"Nothing left to redo.");
+                        TerrariaInGameWorldEditor.NewText(LocalizationUtils.GetTextValue("Editor.System.Messages.RedoEmpty"));
                     }
                 }
 
@@ -414,7 +415,7 @@ namespace TerrariaInGameWorldEditor.Editor
                     if (CurrentSelection?.Count > 0)
                     {
                         CopyToClipboard(CurrentSelection); // copy
-                        TerrariaInGameWorldEditor.NewText($"Copied.");
+                        TerrariaInGameWorldEditor.NewText(LocalizationUtils.GetTextValue("Editor.System.Messages.Copy"));
                     }
                 }
 
@@ -426,12 +427,12 @@ namespace TerrariaInGameWorldEditor.Editor
                         if (CurrentTool != _pasteTool)
                         {
                             CurrentTool = _pasteTool;
-                            TerrariaInGameWorldEditor.NewText($"Paste tool opened. Press Ctrl + {Keybinds.PasteMK.GetAssignedKeys()[0]} again to paste.");
+                            TerrariaInGameWorldEditor.NewText(LocalizationUtils.GetTextValue("Editor.System.Messages.PasteStart", Keybinds.PasteMK.GetAssignedKeys()[0]));
                         }
                     }
                     else
                     {
-                        TerrariaInGameWorldEditor.NewText($"Nothing in clipboard.");
+                        TerrariaInGameWorldEditor.NewText(LocalizationUtils.GetTextValue("Editor.System.Messages.PasteEmpty"));
                     }
                 }
 
@@ -442,7 +443,7 @@ namespace TerrariaInGameWorldEditor.Editor
                     {
                         CopyToClipboard(CurrentSelection);
                         ToolUtils.Delete(CurrentSelection);
-                        TerrariaInGameWorldEditor.NewText($"Cut.");
+                        TerrariaInGameWorldEditor.NewText(LocalizationUtils.GetTextValue("Editor.System.Messages.Cut"));
                     }
                 }
 
@@ -464,7 +465,7 @@ namespace TerrariaInGameWorldEditor.Editor
                     if (CurrentSelection != null)
                     {
                         ToolUtils.Delete(CurrentSelection);
-                        TerrariaInGameWorldEditor.NewText($"Deleted.");
+                        TerrariaInGameWorldEditor.NewText(LocalizationUtils.GetTextValue("Editor.System.Messages.Delete"));
                     }
                 }
             }
@@ -491,11 +492,7 @@ namespace TerrariaInGameWorldEditor.Editor
                     _screenPositionOffset.X = _mouseMiddleClickedPoint.X - Main.mouseX / Main.GameZoomTarget;
                     _screenPositionOffset.Y = _mouseMiddleClickedPoint.Y - Main.mouseY / Main.GameZoomTarget;
                 }
-                int mult = 1;
-                if (Keybinds.FastMoveMK.Current)
-                {
-                    mult = 3;
-                }
+                int mult = Keybinds.FastMoveMK.Current ? 3 : 1;
                 if (PlayerInput.Triggers.Current.KeyStatus["Up"] || PlayerInput.Triggers.Current.KeyStatus["Jump"])
                 {
                     _screenPositionOffset.Y -= 10 * mult;
