@@ -1,6 +1,6 @@
 Keybinds: {
 	OpenEditor.DisplayName: Open editor
-	Delete.DisplayName: Delete (Ctrl + Key)
+	Delete.DisplayName: Delete
 	Copy.DisplayName: Copy (Ctrl + Key)
 	Paste.DisplayName: Paste (Ctrl + Key)
 	ChangeCorner.DisplayName: Change paste corner (Ctrl + Key)
@@ -205,6 +205,8 @@ Editor: {
 			Cut: Cut.
 			Delete: Deleted.
 		}
+
+		Notes.OutsideWorld: "[c/EAD87A:Note:] Modifying tiles outside the visible world."
 
 		Exceptions: {
 			ILDrawPlayerChat: Error IL editing DrawPlayerChat.

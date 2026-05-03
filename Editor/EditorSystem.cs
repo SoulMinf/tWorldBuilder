@@ -79,7 +79,7 @@ namespace TerrariaInGameWorldEditor.Editor
         private PasteTool _pasteTool;
         private Tool _currentTool;
         public Tool CurrentTool
-        { 
+        {
             get => _currentTool;
             set
             {
@@ -220,6 +220,7 @@ namespace TerrariaInGameWorldEditor.Editor
                     LanguageChange = true;
                     orig(self, resetValuesToKeysFirst);
                 };
+                On_Main.ClampScreenPositionToWorld += OverrideScreenClamp;
             }
 
             // default
@@ -232,13 +233,28 @@ namespace TerrariaInGameWorldEditor.Editor
             SelectedTile = new TileCopy(tile);
         }
 
+        private void OverrideScreenClamp(On_Main.orig_ClampScreenPositionToWorld orig)
+        {
+            if (!_mainUIState.Visible)
+            {
+                orig();
+            }
+            float minX = Main.leftWorld;
+            float minY = Main.topWorld;
+            float maxX = Main.rightWorld;
+            float maxY = Main.bottomWorld;
+            float x = Math.Clamp(Main.screenPosition.X, minX, maxX);
+            float y = Math.Clamp(Main.screenPosition.Y, minY, maxY);
+            Main.screenPosition = new Vector2(x, y);
+        }
+
         private void DisableSmartCursor(On_Player.orig_TryToToggleSmartCursor orig, Player self, ref bool smartCursorWanted)
         {
-            if (_mainUIState.Visible)
+            if (!_mainUIState.Visible)
             {
-                smartCursorWanted = false;
+                orig(self, ref smartCursorWanted);
             }
-            orig(self, ref smartCursorWanted);
+            smartCursorWanted = false;
         }
 
         private void DrawPlayerChat(ILContext il)
@@ -313,9 +329,26 @@ namespace TerrariaInGameWorldEditor.Editor
             if (Local.CurrentSelection?.Count > 0)
             {
                 DrawUtils.DrawTileCollectionOutline(Local.CurrentSelection, new Point(Local.CurrentSelection.GetMinX(), Local.CurrentSelection.GetMinY()), Local.Settings.ToolColor);
-                DrawUtils.DrawMiscOptions(new Rectangle(Local.CurrentSelection.GetMinX(), Local.CurrentSelection.GetMinY(), Local.CurrentSelection.GetWidth(), Local.CurrentSelection.GetHeight()), EditorSystem.Local.Settings.ShowCenterLines, EditorSystem.Local.Settings.ShowMeasureLines);
+                DrawUtils.DrawMiscOptions(new Rectangle(Local.CurrentSelection.GetMinX(), Local.CurrentSelection.GetMinY(), Local.CurrentSelection.GetWidth(), Local.CurrentSelection.GetHeight()), Local.Settings.ShowCenterLines, Local.Settings.ShowMeasureLines);
             }
             Local.CurrentTool?.Draw(Main.spriteBatch);
+
+            // draw indicator for the edge of the world
+            int topLeftX = 41;
+            int topLeftY = 41;
+            int bottomRightX = (Main.maxTilesX - 41);
+            int bottomRightY = (Main.maxTilesY - 41);
+            Vector2 topLeft = new Vector2(topLeftX * 16 - Main.screenPosition.X, topLeftY * 16 - Main.screenPosition.Y);
+            Vector2 bottomRight = new Vector2(bottomRightX * 16 - Main.screenPosition.X, bottomRightY * 16 - Main.screenPosition.Y);
+            Color c = new Color(120, 80, 80, 128);
+            DrawUtils.DrawLine(new Vector2(topLeft.X, topLeft.Y - 16), new Vector2(topLeft.X, bottomRight.Y), 16, c); // left
+            DrawUtils.DrawLine(new Vector2(bottomRight.X, topLeft.Y - 16), new Vector2(bottomRight.X, bottomRight.Y - 16), 16, c); // rightaw
+            DrawUtils.DrawLine(new Vector2(topLeft.X, topLeft.Y - 16), new Vector2(bottomRight.X - 16, topLeft.Y - 16), 16, c); // top
+            DrawUtils.DrawLine(new Vector2(topLeft.X, bottomRight.Y - 16), new Vector2(bottomRight.X, bottomRight.Y - 16), 16, c); // bottom
+            if (Player.tileTargetX > bottomRightX - 2 || Player.tileTargetX < topLeftX || Player.tileTargetY > bottomRightY - 2 || Player.tileTargetY < topLeftY)
+            {
+                Main.instance.MouseText(LocalizationUtils.GetTextValue("Editor.System.Notes.OutsideWorld"));
+            }
 
             // make sure we dont draw any other layers
             for (int i = 0; i < layers.Count; i++)
@@ -458,7 +491,9 @@ namespace TerrariaInGameWorldEditor.Editor
                 {
                     _saveUIState.Visible = true;
                 }
-
+            }
+            else // if key 1 is not pressed down
+            {
                 // delete
                 if (Keybinds.DeleteMK.JustPressed)
                 {
@@ -468,9 +503,7 @@ namespace TerrariaInGameWorldEditor.Editor
                         TerrariaInGameWorldEditor.NewText(LocalizationUtils.GetTextValue("Editor.System.Messages.Delete"));
                     }
                 }
-            }
-            else // if key 1 is not pressed down
-            {
+
                 // zoom in/out with mouse
                 PlayerInput.LockVanillaMouseScroll($"{TerrariaInGameWorldEditor.MODNAME}/Zoom");
                 if (PlayerInput.ScrollWheelDelta > 0 && !Main.LocalPlayer.mouseInterface)
@@ -492,6 +525,7 @@ namespace TerrariaInGameWorldEditor.Editor
                     _screenPositionOffset.X = _mouseMiddleClickedPoint.X - Main.mouseX / Main.GameZoomTarget;
                     _screenPositionOffset.Y = _mouseMiddleClickedPoint.Y - Main.mouseY / Main.GameZoomTarget;
                 }
+
                 int mult = Keybinds.FastMoveMK.Current ? 3 : 1;
                 if (PlayerInput.Triggers.Current.KeyStatus["Up"] || PlayerInput.Triggers.Current.KeyStatus["Jump"])
                 {
@@ -509,7 +543,7 @@ namespace TerrariaInGameWorldEditor.Editor
                 {
                     _screenPositionOffset.X += 10 * mult;
                 }
-                _screenPositionOffset = Vector2.Clamp(_screenPositionOffset, Vector2.Zero, new Vector2(Main.maxTilesX * 16, Main.maxTilesY * 16));
+                _screenPositionOffset = Vector2.Clamp(_screenPositionOffset, new Vector2(-16, -16), new Vector2(Main.maxTilesX * 16 + 16, Main.maxTilesY * 16 + 16));
             }
         }
 
@@ -551,8 +585,8 @@ namespace TerrariaInGameWorldEditor.Editor
                 {
                     Vector2 screenPos = new Vector2(Main.screenPosition.X + Main.screenWidth / 2f - Main.LocalPlayer.width / 2f, Main.screenPosition.Y + Main.screenHeight / 2f - Main.LocalPlayer.height / 2f);
                     Main.LocalPlayer.Teleport(screenPos);
-                    Main.blockInput = false;
                 }
+                Main.blockInput = false;
             }
             else
             {

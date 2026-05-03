@@ -41,17 +41,19 @@ namespace TerrariaInGameWorldEditor.Content.Tools
 
         public override string GetInfoText()
         {
-            Rectangle selection = new Rectangle(0, 0, 0, 0);
-
-            if (_point1placed)
+            if (!_point1placed)
             {
-                // temp point at the cursor
-                if (!_point2placed)
-                {
-                    _point2 = new Point(_canChangePoint2X ? Player.tileTargetX : _point1.X + _oldWidth, _canChangePoint2Y ? Player.tileTargetY : _point1.Y + _oldHeight);
-                }
-                selection = ToolUtils.GetRectangleFromPoints(_point1, _point2);
+                return "";
             }
+
+            // temp point at the cursor
+            Rectangle selection = new Rectangle(0, 0, 0, 0);
+            if (!_point2placed)
+            {
+                _point2 = new Point(_canChangePoint2X ? Player.tileTargetX : _point1.X + _oldWidth, _canChangePoint2Y ? Player.tileTargetY : _point1.Y + _oldHeight);
+            }
+            selection = ToolUtils.GetRectangleFromPoints(_point1, _point2);
+
             return LocalizationUtils.GetTextValue("Tools.BoxSelectionTool.InfoText", _selection.GetHeight(), _selection.GetWidth());
         }
 
