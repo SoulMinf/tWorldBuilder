@@ -40,6 +40,8 @@ Windows: {
 			ModifyOn: Draw/paste on tiles with:
 		}
 
+		HoverText.Reset: Reset
+
 		LabelText: {
 			Tiles: Tiles
 			Walls: Walls
@@ -266,6 +268,8 @@ Tools: {
 			Box Selection 
 			[c/EAD87A:Right Mouse:] Remove selection 
 			[c/EAD87A:Left Mouse:] New selection
+			[c/EAD87A:Ctrl + Left Mouse:] Add to selection 
+			[c/EAD87A:Shift + Left Mouse:] Remove from selection
 			'''
 		InfoText: "[c/EAD87A:Width:] {0}, [c/EAD87A:Height:] {1}"
 	}

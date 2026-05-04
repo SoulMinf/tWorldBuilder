@@ -50,6 +50,11 @@ namespace TerrariaInGameWorldEditor.Content.Tools
             return _selection;
         }
 
+        public void SetSelection(TileCollection selection)
+        {
+            _selection = selection ?? _selection;
+        }
+
         public void ResetSelection()
         {
             _selection.Clear();

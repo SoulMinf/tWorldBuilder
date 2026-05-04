@@ -87,7 +87,6 @@ namespace TerrariaInGameWorldEditor.Editor
                 _mainUIState.RecalculateToolSettings();
             }
         }
-        public ISelectionTool LastSelectionTool { get; set; }
 
         // editing
         public TileCollection Clipboard // current clipboard
@@ -385,7 +384,12 @@ namespace TerrariaInGameWorldEditor.Editor
         {
             base.PostUpdateInput();
 
-            if (Keybinds.OpenEditorMK.JustPressed && !Main.mapFullscreen)
+            // mod keybinds havent been added yet
+            if (PlayerInput.Triggers.JustPressed.KeyStatus.Count <= PlayerInput.KnownTriggers.Count)
+            {
+                return;
+            }
+            if (Keybinds.OpenEditorMK?.JustPressed == true && !Main.mapFullscreen)
             {
                 ToggleEditor();
             }

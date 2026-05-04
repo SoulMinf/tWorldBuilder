@@ -2,12 +2,15 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using ReLogic.Content;
+using System;
 using Terraria;
 using Terraria.Audio;
+using Terraria.GameContent;
 using Terraria.GameContent.UI.Elements;
 using Terraria.GameInput;
 using Terraria.ModLoader;
 using Terraria.UI;
+using Terraria.UI.Chat;
 using TerrariaInGameWorldEditor.Common.Utils;
 using TerrariaInGameWorldEditor.UIElements.ImageResizeable;
 
@@ -35,10 +38,14 @@ namespace TerrariaInGameWorldEditor.UIElements.TextField
         private bool _isPlaceholderTextActive;
         private int _maxTextLength;
         private UIText _tfText;
+        private UIElement _clipContainer;
         private TIGWEImageResizeable _background;
         private int _textBlink;
         private string _currentText = "";
         private Asset<Texture2D> _searchIcon;
+        private int _textWidth = 0;
+        private float _textScroll = 0;
+        private bool _scrollRight = false;
 
         public TIGWETextField(string placeholderText = null, int maxTextLength = 30)
         {
@@ -59,9 +66,13 @@ namespace TerrariaInGameWorldEditor.UIElements.TextField
             Append(_background);
 
             // actual text
+            _clipContainer = new UIElement();
+            _clipContainer.OverflowHidden = true;
+            _clipContainer.IgnoresMouseInteraction = true;
             _tfText = new UIText("");
             _tfText.IgnoresMouseInteraction = true;
-            Append(_tfText);
+            _clipContainer.Append(_tfText);
+            Append(_clipContainer);
 
             // default offsets
             TextOffsetLeft = 10;
@@ -86,9 +97,20 @@ namespace TerrariaInGameWorldEditor.UIElements.TextField
                 if (newText != _currentText && newText.Length < _maxTextLength + 1)
                 {
                     _currentText = newText;
-                    OnTextChanged?.Invoke(_currentText);
+                    TextChanged(_currentText);
                 }
             }
+
+            // this is kinda weird but ok
+            _background.Texture = IsFocused ? _background.TextureHover : ModContent.Request<Texture2D>($"{UIElementUtils.Path}/UIElements/Assets/Texture");
+            UIElementUtils.SetSpriteBatchToTheme(ref spriteBatch);
+            base.DrawSelf(spriteBatch);
+            UIElementUtils.SetSpriteBatchToNormal(ref spriteBatch);
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
 
             // set text to placeholder text if we havent written anything
             string text = _currentText.Length == 0 && !IsFocused ? PlaceholderText : _currentText;
@@ -100,6 +122,27 @@ namespace TerrariaInGameWorldEditor.UIElements.TextField
                 text += "|";
             }
             _tfText.SetText(text);
+
+            // text scroll thing
+            if (_textWidth > Width.Pixels && !IsFocused)
+            {
+                _textScroll += _scrollRight ? 0.3f : -0.3f;
+                _tfText.Left.Set(_tfText.Left.Pixels + _textScroll, 0);
+                if (_textWidth + _textScroll < Width.Pixels - 26)
+                {
+                    _scrollRight = true;
+                }
+                if (_textScroll >= 0)
+                {
+                    _scrollRight = false;
+                }
+                _tfText.Left.Set(_textScroll, 0);
+            }
+            else
+            {
+                _textScroll = 0;
+                _tfText.Left.Set(Math.Clamp(Width.Pixels - _textWidth - 26, int.MinValue, -6), 0);
+            }
 
             if (IsFocused)
             {
@@ -114,17 +157,11 @@ namespace TerrariaInGameWorldEditor.UIElements.TextField
                         {
                             _currentText = _currentText + words[i] + " ";
                         }
-                        OnTextChanged?.Invoke(_currentText);
+                        TextChanged(_currentText);
                     }
                 }
             }
             Recalculate();
-
-            // this is kinda weird but ok
-            _background.Texture = IsFocused ? _background.TextureHover : ModContent.Request<Texture2D>($"{UIElementUtils.Path}/UIElements/Assets/Texture");
-            UIElementUtils.SetSpriteBatchToTheme(ref spriteBatch);
-            base.DrawSelf(spriteBatch);
-            UIElementUtils.SetSpriteBatchToNormal(ref spriteBatch);
         }
 
         protected override void DrawChildren(SpriteBatch spriteBatch)
@@ -144,6 +181,9 @@ namespace TerrariaInGameWorldEditor.UIElements.TextField
             // update offset
             _background.Width.Set(Width.Pixels, 0);
             _background.Height.Set(Height.Pixels, 0);
+            _clipContainer.Left.Set(6, 0);
+            _clipContainer.Width.Set(Width.Pixels - 12, 0);
+            _clipContainer.Height.Set(Height.Pixels, 0);
         }
 
         public override void MouseOver(UIMouseEvent evt)
@@ -156,6 +196,12 @@ namespace TerrariaInGameWorldEditor.UIElements.TextField
         {
             base.LeftClick(evt);
             Main.GetInputText(_currentText);
+        }
+
+        void TextChanged(string text)
+        {
+            OnTextChanged?.Invoke(text);
+            _textWidth = (int)ChatManager.GetStringSize(FontAssets.MouseText.Value, _currentText, new Vector2(1)).X;
         }
 
         public virtual string GetText()
@@ -184,7 +230,7 @@ namespace TerrariaInGameWorldEditor.UIElements.TextField
                 _currentText = text;
                 if (raiseEvent)
                 {
-                    OnTextChanged?.Invoke(text);
+                    TextChanged(text);
                 }
             }
         }

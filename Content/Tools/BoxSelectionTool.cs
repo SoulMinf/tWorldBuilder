@@ -1,8 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameInput;
 using Terraria.ModLoader;
 using TerrariaInGameWorldEditor.Common;
 using TerrariaInGameWorldEditor.Common.Utils;
@@ -31,6 +33,7 @@ namespace TerrariaInGameWorldEditor.Content.Tools
         private int _oldHeight = 0;
 
         private TileCollection _selection;
+        private bool _canResize = false;
 
         public BoxSelectionTool()
         {
@@ -54,12 +57,11 @@ namespace TerrariaInGameWorldEditor.Content.Tools
             }
             selection = ToolUtils.GetRectangleFromPoints(_point1, _point2);
 
-            return LocalizationUtils.GetTextValue("Tools.BoxSelectionTool.InfoText", _selection.GetHeight(), _selection.GetWidth());
+            return LocalizationUtils.GetTextValue("Tools.BoxSelectionTool.InfoText", selection.Width, selection.Height);
         }
 
         public void ResetSelection()
         {
-            // unplace both points if you right click, results in selection going away
             _point1placed = false;
             _point2placed = false;
             _canChangePoint2X = true;
@@ -73,12 +75,17 @@ namespace TerrariaInGameWorldEditor.Content.Tools
 
         public TileCollection GetSelection()
         {
-            // no selection
-            if (!_point1placed || !_point2placed)
+            if (!_point2placed && _canResize)
             {
                 return null;
-            }            
+            }
             return _selection;
+        }
+
+        public void SetSelection(TileCollection selection)
+        {
+            _canResize = false;
+            _selection = selection ?? _selection;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -92,11 +99,23 @@ namespace TerrariaInGameWorldEditor.Content.Tools
             // draw a rectangle outline while we dont have anything actually selected
             if (_point1placed && !_point2placed)
             {
-                DrawUtils.DrawRectangleOutline(selection, EditorSystem.Local.Settings.ToolColor);
+                Color color = EditorSystem.Local.Settings.ToolColor;
+                if (_selection.Count > 0)
+                {
+                    if (PlayerInput.GetPressedKeys().Contains(Keys.LeftShift))
+                    {
+                        color = Color.IndianRed;
+                    }
+                    if (PlayerInput.GetPressedKeys().Contains(Keys.LeftControl))
+                    {
+                        color = Color.ForestGreen;
+                    }
+                }
+                DrawUtils.DrawRectangleOutline(selection, color);
             }
 
             // draw hovering side highlight
-            if (HoveringAny && _point1placed && _point2placed)
+            if (HoveringAny && _point1placed && _point2placed && _canResize)
             {
                 spriteBatch.Begin(default, BlendState.AlphaBlend, SamplerState.PointClamp, default, default, default, Main.GameViewMatrix.ZoomMatrix);
                 if (_hoveringTop)
@@ -147,7 +166,7 @@ namespace TerrariaInGameWorldEditor.Content.Tools
             // left click
             if (Main.mouseLeft && Main.mouseLeftRelease && !Main.LocalPlayer.mouseInterface)
             {
-                if (HoveringAny)
+                if (HoveringAny && _canResize)
                 {
                     // we are hovering over a side, allow changing only that axis
                     _canChangePoint2X = _hoveringLeft || _hoveringRight;
@@ -173,6 +192,16 @@ namespace TerrariaInGameWorldEditor.Content.Tools
                 } 
                 else
                 {
+                    if (!PlayerInput.GetPressedKeys().Contains(Keys.LeftControl) && !PlayerInput.GetPressedKeys().Contains(Keys.LeftShift))
+                    {
+                        _canResize = true;
+                        _selection.Clear();
+                    }
+                    else
+                    {
+                        _canResize = false;
+                    }
+
                     if (!_point1placed || (_point1placed && _point2placed)) // if both points have aleady been placed, reset them and place point 1 again
                     {
                         _point1 = new Point(Player.tileTargetX, Player.tileTargetY); // get mouse coordinates in the world and save them to point1
@@ -185,10 +214,11 @@ namespace TerrariaInGameWorldEditor.Content.Tools
                         {
                             _point2 = new Point(_canChangePoint2X ? Player.tileTargetX : _point1.X + _oldWidth, _canChangePoint2Y ? Player.tileTargetY : _point1.Y + _oldHeight);
                             _point2placed = true;
+                            _canChangePoint2X = true;
+                            _canChangePoint2Y = true;
 
-                            // update selection
-                            _selection.Clear();
                             Rectangle selection = ToolUtils.GetRectangleFromPoints(_point1, _point2);
+                            bool selectionEmpty = _selection.Count > 0;
                             int width = selection.Width;
                             int height = selection.Height;
                             for (int x = 0; x < width; x++)
@@ -197,7 +227,14 @@ namespace TerrariaInGameWorldEditor.Content.Tools
                                 {
                                     int newX = x + selection.X;
                                     int newY = y + selection.Y;
-                                    _selection.TryAddTile(new Point16(newX, newY), new TileCopy(newX, newY));
+                                    if (PlayerInput.GetPressedKeys().Contains(Keys.LeftShift) && selectionEmpty)
+                                    {
+                                        _selection.TryRemoveTile(new Point16(newX, newY));
+                                    }
+                                    else
+                                    {
+                                        _selection.TryAddTile(new Point16(newX, newY), new TileCopy(newX, newY));
+                                    }
                                 }
                             }
                         }

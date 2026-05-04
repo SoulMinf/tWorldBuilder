@@ -76,8 +76,15 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.TileSelector
                 tile.BlueWire = false;
                 tile.YellowWire = false;
                 tile.GreenWire = false;
+                tile.IsWallFullbright = false;
+                tile.SkipLiquid = false;
+                tile.IsTileInvisible = false;
+                tile.IsWallInvisible = false;
+                tile.CheckingLiquid = false;
+                tile.HasActuator = false;
+                tile.TileFrameNumber = 0;
 
-                var tileObjectData = (TileObjectData.GetTileData(_createTile, _placeStyle, 0) ?? TileObjectData.GetTileData(_createTile, 0, 0)) ?? null;
+                TileObjectData tileObjectData = TileObjectData.GetTileData(_createTile, _placeStyle, 0) ?? TileObjectData.GetTileData(_createTile, 0, 0);
                 if (tileObjectData != null)
                 {
                     // calculate TileFrameX and TileFrameY

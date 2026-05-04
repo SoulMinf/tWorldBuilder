@@ -8,7 +8,6 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.UI.Elements;
 using Terraria.UI;
 using TerrariaInGameWorldEditor.Common.Utils;
-using TerrariaInGameWorldEditor.Content;
 using TerrariaInGameWorldEditor.Content.Tools;
 using TerrariaInGameWorldEditor.UIElements.Button;
 using TerrariaInGameWorldEditor.UIElements.ImageResizeable;
@@ -295,11 +294,10 @@ namespace TerrariaInGameWorldEditor.Editor
                 int toolHeight = 30;
                 tool.ToggleToolButton.OnLeftClick += (_, _) =>
                 {
-                    // reset selection if we clicked another selection tool
-                    if (tool is ISelectionTool selectionTool && selectionTool != EditorSystem.Local.CurrentTool && EditorSystem.Local.LastSelectionTool != selectionTool)
+                    // add selection if we clicked another selection tool
+                    if (tool is ISelectionTool selectionTool && selectionTool != EditorSystem.Local.CurrentTool)
                     {
-                        EditorSystem.Local.LastSelectionTool = selectionTool;
-                        selectionTool.ResetSelection();
+                        selectionTool.SetSelection(EditorSystem.Local.CurrentSelection);
                     }
 
                     // toggle tool

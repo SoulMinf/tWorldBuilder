@@ -3,6 +3,7 @@ using Terraria.GameContent.UI.Elements;
 using Terraria.ModLoader;
 using TerrariaInGameWorldEditor.Common;
 using TerrariaInGameWorldEditor.Common.Utils;
+using TerrariaInGameWorldEditor.UIElements.Button;
 using TerrariaInGameWorldEditor.UIElements.CheckBox;
 using TerrariaInGameWorldEditor.UIElements.DropDown;
 using TerrariaInGameWorldEditor.UIElements.ImageResizeable;
@@ -106,6 +107,23 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.Masks
             pasteAirText.Top.Set(pasteAirCheckBox.Top.Pixels + 4, 0);
             pasteTilesOptions.Append(pasteAirText);
 
+            // reset button
+            TIGWEButton pasteTilesReset = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/EditorWindows/ResetMasks"));
+            pasteTilesReset.SetVisibility(0.8f, 1f);
+            pasteTilesReset.HoverText = LocalizationUtils.GetTextValue("Windows.Masks.HoverText.Reset");
+            pasteTilesReset.Width.Set(18, 0);
+            pasteTilesReset.Height.Set(18, 0);
+            pasteTilesReset.Left.Set(pasteTilesOptions.Width.Pixels - pasteTilesReset.Width.Pixels - 6, 0);
+            pasteTilesReset.Top.Set(6, 0);
+            pasteTilesReset.OnLeftClick += (_, _) =>
+            {
+                pasteTilesCheckBox.IsChecked = true;
+                pasteWallsCheckBox.IsChecked = true;
+                pasteLiquidCheckBox.IsChecked = true;
+                pasteWireCheckBox.IsChecked = true;
+                pasteAirCheckBox.IsChecked = true;
+            };
+            pasteTilesOptions.Append(pasteTilesReset);
 
             // what tiles to draw/paste on
             TIGWEImageResizeable pasteOnTilesOptions = new TIGWEImageResizeable(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/General/Texture"));
@@ -205,6 +223,23 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.Masks
             pasteOnWireText.Left.Set(pasteOnWireDropDown.Left.Pixels + pasteOnWireDropDown.Width.Pixels + 4, 0);
             pasteOnWireText.Top.Set(pasteOnWireDropDown.Top.Pixels + 4, 0);
             pasteOnTilesOptions.Append(pasteOnWireText);
+
+            // reset button
+            TIGWEButton pasteOnTilesReset = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/EditorWindows/ResetMasks"));
+            pasteOnTilesReset.SetVisibility(0.8f, 1f);
+            pasteOnTilesReset.HoverText = LocalizationUtils.GetTextValue("Windows.Masks.HoverText.Reset");
+            pasteOnTilesReset.Width.Set(18, 0);
+            pasteOnTilesReset.Height.Set(18, 0);
+            pasteOnTilesReset.Left.Set(pasteOnTilesOptions.Width.Pixels - pasteOnTilesReset.Width.Pixels - 6, 0);
+            pasteOnTilesReset.Top.Set(6, 0);
+            pasteOnTilesReset.OnLeftClick += (_, _) =>
+            {
+                pasteOnTilesDropDown.SetSelectedValue(Mask.Any);
+                pasteOnWallsDropDown.SetSelectedValue(Mask.Any);
+                pasteOnLiquidDropDown.SetSelectedValue(Mask.Any);
+                pasteOnWireDropDown.SetSelectedValue(Mask.Any);
+            };
+            pasteOnTilesOptions.Append(pasteOnTilesReset);
         }
     }
 }
