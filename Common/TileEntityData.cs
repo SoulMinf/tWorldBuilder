@@ -63,7 +63,7 @@ namespace TerrariaInGameWorldEditor.Common
                 ted.EntityTag = TagIO.Read(br);
                 return ted;
             }
-            catch (Exception ex)
+            catch
             {
                 return null;
             }

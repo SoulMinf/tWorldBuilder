@@ -420,5 +420,19 @@ namespace TerrariaInGameWorldEditor.Common.Utils
             Rectangle selection = new Rectangle(posLeft, posUp, width + 1, height + 1);
             return selection;
         }
+
+        // should really be changed to take in something like a hashset of points instead
+        // returns an updated copy of the tiles at the coordinates in the entered tilecollection
+        public static TileCollection Copy(TileCollection tilesToCopy)
+        {
+            TileCollection tiles = new TileCollection();
+            foreach (var tile in tilesToCopy)
+            {
+                int x = tile.Key.X;
+                int y = tile.Key.Y;
+                tiles.TryAddTile(new Point16(x, y), new TileCopy(Main.tile[x, y]));
+            }
+            return tiles;
+        }
     }
 }

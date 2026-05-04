@@ -204,6 +204,7 @@ Editor: {
 			Copy: Copied.
 			PasteStart: Paste tool opened. Press Ctrl + {0} again to paste.
 			PasteEmpty: Nothing in clipboard.
+			PasteCant: Can't paste right now.
 			Cut: Cut.
 			Delete: Deleted.
 		}
@@ -389,5 +390,15 @@ Tools: {
 	TilePickerTool: {
 		HoverText: Tile Picker
 		InfoText: "[c/EAD87A:Target Tile Type:] {0} ([c/EAD87A:ID:] {1}), [c/EAD87A:Target Wall Type:] {2} ([c/EAD87A:ID:] {3})"
+	}
+
+	MoveTool: {
+		HoverText:
+			'''
+			Move
+			[c/EAD87A:Left Mouse:] Move tiles
+			[c/EAD87A:Right Mouse:] Move selection
+			'''
+		InfoText: "[c/EAD87A:Tile count:] {0}"
 	}
 }

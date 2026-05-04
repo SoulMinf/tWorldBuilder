@@ -301,6 +301,7 @@ namespace TerrariaInGameWorldEditor.Editor
                     }
 
                     // toggle tool
+                    EditorSystem.Local.CanPaste = true;
                     EditorSystem.Local.CurrentTool = EditorSystem.Local.CurrentTool == tool ? null : tool;
                     SoundEngine.PlaySound(Terraria.ID.SoundID.MenuTick);
                 };

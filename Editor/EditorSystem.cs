@@ -77,6 +77,7 @@ namespace TerrariaInGameWorldEditor.Editor
         // tools
         public List<Tool> Tools { get; private set; }
         private PasteTool _pasteTool;
+        public bool CanPaste { get; set; }
         private Tool _currentTool;
         public Tool CurrentTool
         {
@@ -186,7 +187,7 @@ namespace TerrariaInGameWorldEditor.Editor
             {
                 Local = this;
                 _pasteTool = new PasteTool();
-                Tools = new List<Tool> { new BrushTool(), new EraseTool(), new LineTool(), new ShapesTool(), new PaintBucketTool(), new TilePickerTool(), new BoxSelectionTool(), new MagicWandTool(), new LassoTool() };
+                Tools = new List<Tool> { new BrushTool(), new EraseTool(), new LineTool(), new ShapesTool(), new PaintBucketTool(), new TilePickerTool(), new BoxSelectionTool(), new MagicWandTool(), new LassoTool(), new MoveTool() };
                 Settings = new TIGWESettings(); // just some default settings to use so settings arent null during load
                 Settings = TIGWESettings.Load($"{ModLoader.ModPath.Replace("\\Mods", "")}\\{TerrariaInGameWorldEditor.MODNAME}\\settings");
 
@@ -451,7 +452,7 @@ namespace TerrariaInGameWorldEditor.Editor
                 {
                     if (CurrentSelection?.Count > 0)
                     {
-                        CopyToClipboard(CurrentSelection); // copy
+                        CopyToClipboard(CurrentSelection);
                         TerrariaInGameWorldEditor.NewText(LocalizationUtils.GetTextValue("Editor.System.Messages.Copy"));
                     }
                 }
@@ -459,17 +460,24 @@ namespace TerrariaInGameWorldEditor.Editor
                 // paste
                 if (Keybinds.PasteMK.JustPressed)
                 {
-                    if (Clipboard?.Count > 0) // if we have something in our clipboard
+                    if (CanPaste)
                     {
-                        if (CurrentTool != _pasteTool)
+                        if (Clipboard?.Count > 0) // if we have something in our clipboard
                         {
-                            CurrentTool = _pasteTool;
-                            TerrariaInGameWorldEditor.NewText(LocalizationUtils.GetTextValue("Editor.System.Messages.PasteStart", Keybinds.PasteMK.GetAssignedKeys()[0]));
+                            if (CurrentTool != _pasteTool)
+                            {
+                                CurrentTool = _pasteTool;
+                                TerrariaInGameWorldEditor.NewText(LocalizationUtils.GetTextValue("Editor.System.Messages.PasteStart", Keybinds.PasteMK.GetAssignedKeys()[0]));
+                            }
+                        }
+                        else
+                        {
+                            TerrariaInGameWorldEditor.NewText(LocalizationUtils.GetTextValue("Editor.System.Messages.PasteEmpty"));
                         }
                     }
                     else
                     {
-                        TerrariaInGameWorldEditor.NewText(LocalizationUtils.GetTextValue("Editor.System.Messages.PasteEmpty"));
+                        TerrariaInGameWorldEditor.NewText(LocalizationUtils.GetTextValue("Editor.System.Messages.PasteCant"));
                     }
                 }
 
@@ -646,7 +654,7 @@ namespace TerrariaInGameWorldEditor.Editor
         public void CopyToClipboard(TileCollection tilesToCopy) // copy area in gotten area
         {
             Clipboard.Clear();
-            Clipboard.TryAddTiles(tilesToCopy);
+            Clipboard = ToolUtils.Copy(tilesToCopy);
         }
 
         public void Redo()
