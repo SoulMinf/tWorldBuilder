@@ -220,6 +220,7 @@ namespace TerrariaInGameWorldEditor.Common.Utils
             original.TileFrameX = tile.TileFrameX;
             original.TileFrameY = tile.TileFrameY;
             original.IsActuated = tile.IsActuated;
+            original.IsTileFullbright = tile.IsTileFullbright;
         }
 
         public static void CopyWireData(this Tile original, TileCopy tile)
@@ -430,7 +431,7 @@ namespace TerrariaInGameWorldEditor.Common.Utils
             {
                 int x = tile.Key.X;
                 int y = tile.Key.Y;
-                tiles.TryAddTile(new Point16(x, y), new TileCopy(Main.tile[x, y]));
+                tiles.TryAddTile(new Point16(x, y), new TileCopy(x, y));
             }
             return tiles;
         }

@@ -326,6 +326,22 @@ namespace TerrariaInGameWorldEditor.Common
             }
         }
 
+        public static TileCollection ReadV3TileCollection(BinaryReader br, out HashSet<string> missingMods)
+        {
+            missingMods = new HashSet<string>();
+            TileCollection tc = new TileCollection();
+
+            // read tiles
+            int count = br.ReadInt32();
+            for (int i = 0; i < count; i++)
+            {
+                short x = br.ReadInt16();
+                short y = br.ReadInt16();
+                tc.TryAddTile(new Point16(x, y), TileCopy.ReadV3TileCopy(br, missingMods));
+            }
+            return tc;
+        }
+
         public static TileCollection ReadV2TileCollection(BinaryReader br, out HashSet<string> missingMods)
         {
             missingMods = new HashSet<string>();

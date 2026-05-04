@@ -26,6 +26,7 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.Settings
         public bool ShouldShowMessages { get; set; } = true;
         public bool ShouldShowErrors { get; set; } = true;
         public bool ShouldShowFatalErrors { get; set; } = true;
+        public ToolInputMode InputMode { get; set; } = ToolInputMode.Click;
 
         // mask settings
         public bool ShouldPasteTiles { get; set; }

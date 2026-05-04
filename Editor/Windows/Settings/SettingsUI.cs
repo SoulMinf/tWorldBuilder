@@ -183,6 +183,16 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.Settings
             {
                 EditorSystem.Local.Settings.ShouldUpdateDrawnTiles = check;
             };
+            SettingsOption<TIGWEDropDown<ToolInputMode>> inputMode = new SettingsOption<TIGWEDropDown<ToolInputMode>>(LocalizationUtils.GetTextValue("Windows.Settings.Settings.InputMode"), new TIGWEDropDown<ToolInputMode>());
+            toolSettings.AddOption(inputMode);
+            inputMode.OptionElement.AddOption(ToolInputMode.Click, LocalizationUtils.GetTextValue("Windows.Settings.Options.InputModes.Click"));
+            inputMode.OptionElement.AddOption(ToolInputMode.Drag, LocalizationUtils.GetTextValue("Windows.Settings.Options.InputModes.Drag"));
+            inputMode.OptionElement.Height.Set(26, 0);
+            inputMode.OptionElement.Width.Set(120, 0);
+            inputMode.OptionElement.OnOptionChanged += (option) =>
+            {
+                EditorSystem.Local.Settings.InputMode = option.Value;
+            };
             SettingsOption<TIGWEColorPicker> toolColor = new SettingsOption<TIGWEColorPicker>(LocalizationUtils.GetTextValue("Windows.Settings.Settings.ToolColor"), new TIGWEColorPicker());
             toolSettings.AddOption(toolColor);
             toolColor.OptionElement.OnColorChanged += (color) =>
@@ -247,6 +257,7 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.Settings
             theme.OptionElement.SetSelectedValue(EditorSystem.Local.Settings.CurrentTheme);
             primaryColor.OptionElement.SetColorPremultipled(EditorSystem.Local.Settings.PrimaryColor);
             secondaryColor.OptionElement.SetColorPremultipled(EditorSystem.Local.Settings.SecondaryColor);
+            inputMode.OptionElement.SetSelectedValue(EditorSystem.Local.Settings.InputMode);
         }
     }
 }

@@ -55,10 +55,8 @@ namespace TerrariaInGameWorldEditor.Content.Tools
 
         public override void PostUpdateInput()
         {
-            Main.blockMouse = true;
-
             // left click
-            if (Main.mouseLeft && Main.mouseLeftRelease && !Main.LocalPlayer.mouseInterface)
+            if (PlayerInput.Triggers.JustPressed.MouseLeft)
             {
                 // if ctrl is pressed down, keep adding tiles to our selection, if shift is pressed down remove tile from our selection
                 if (!PlayerInput.GetPressedKeys().Contains(Keys.LeftControl) && !PlayerInput.GetPressedKeys().Contains(Keys.LeftShift))
@@ -70,7 +68,7 @@ namespace TerrariaInGameWorldEditor.Content.Tools
             base.PostUpdateInput();
 
             // right click
-            if (Main.mouseRight && Main.mouseRightRelease && !Main.LocalPlayer.mouseInterface)
+            if (PlayerInput.Triggers.JustPressed.MouseRight)
             {
                 _selection.Clear();
             }

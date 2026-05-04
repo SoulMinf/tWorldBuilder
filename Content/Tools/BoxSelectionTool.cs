@@ -9,6 +9,7 @@ using Terraria.ModLoader;
 using TerrariaInGameWorldEditor.Common;
 using TerrariaInGameWorldEditor.Common.Utils;
 using TerrariaInGameWorldEditor.Editor;
+using TerrariaInGameWorldEditor.Editor.Windows.Settings;
 using TerrariaInGameWorldEditor.UIElements.Button;
 
 namespace TerrariaInGameWorldEditor.Content.Tools
@@ -161,10 +162,8 @@ namespace TerrariaInGameWorldEditor.Content.Tools
 
         public override void PostUpdateInput()
         {
-            Main.blockMouse = true;
-
             // left click
-            if (Main.mouseLeft && Main.mouseLeftRelease && !Main.LocalPlayer.mouseInterface)
+            if ((PlayerInput.Triggers.JustPressed.MouseLeft) || (EditorSystem.Local.Settings.InputMode == ToolInputMode.Drag && PlayerInput.Triggers.JustReleased.MouseLeft && _point1placed))
             {
                 if (HoveringAny && _canResize)
                 {
@@ -189,7 +188,7 @@ namespace TerrariaInGameWorldEditor.Content.Tools
                     _hoveringBottom = false;
                     _hoveringLeft = false;
                     _hoveringRight = false;
-                } 
+                }
                 else
                 {
                     if (!PlayerInput.GetPressedKeys().Contains(Keys.LeftControl) && !PlayerInput.GetPressedKeys().Contains(Keys.LeftShift))
@@ -243,7 +242,7 @@ namespace TerrariaInGameWorldEditor.Content.Tools
             }
 
             // right click
-            if (Main.mouseRight && Main.mouseRightRelease && !Main.LocalPlayer.mouseInterface)
+            if (PlayerInput.Triggers.JustPressed.MouseRight)
             {
                 ResetSelection();
             }

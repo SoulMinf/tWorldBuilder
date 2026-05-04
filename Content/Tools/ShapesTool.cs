@@ -9,6 +9,7 @@ using Terraria.ModLoader;
 using TerrariaInGameWorldEditor.Common;
 using TerrariaInGameWorldEditor.Common.Utils;
 using TerrariaInGameWorldEditor.Editor;
+using TerrariaInGameWorldEditor.Editor.Windows.Settings;
 using TerrariaInGameWorldEditor.UIElements.Button;
 using TerrariaInGameWorldEditor.UIElements.DropDown;
 using TerrariaInGameWorldEditor.UIElements.NumberField;
@@ -122,7 +123,7 @@ namespace TerrariaInGameWorldEditor.Content.Tools
         public override void PostUpdateInput()
         {
             // left click
-            if (Main.mouseLeft && Main.mouseLeftRelease && !Main.LocalPlayer.mouseInterface)
+            if ((PlayerInput.Triggers.JustPressed.MouseLeft) || (EditorSystem.Local.Settings.InputMode == ToolInputMode.Drag && PlayerInput.Triggers.JustReleased.MouseLeft && _point1placed))
             {
                 if (!_point1placed || (_point1placed && _point2placed)) // if both points have aleady been placed, reset them and place point 1 again
                 {
@@ -141,7 +142,7 @@ namespace TerrariaInGameWorldEditor.Content.Tools
             }
 
             // right click
-            if (Main.mouseRight && Main.mouseRightRelease && !Main.LocalPlayer.mouseInterface)
+            if (Main.mouseRight && Main.mouseRightRelease)
             {
                 // unplace both points if you right click, results in selection going away
                 _point1placed = false;

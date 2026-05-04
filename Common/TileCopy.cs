@@ -35,6 +35,7 @@ namespace TerrariaInGameWorldEditor.Common
         public short TileFrameY { get; set; }
         public Byte WallColor { get; set; }
         public bool IsWallFullbright { get; set; }
+        public bool IsTileFullbright { get; set; }
         public short WallFrameX { get; set; }
         public short WallFrameY { get; set; }
         public bool IsActuated { get; set; }
@@ -190,6 +191,7 @@ namespace TerrariaInGameWorldEditor.Common
             TileFrameX = original.TileFrameX;
             TileFrameY = original.TileFrameY;
             IsActuated = original.IsActuated;
+            IsTileFullbright = original.IsTileFullbright;
         }
 
         public void CopyWireData(Tile original)
@@ -231,6 +233,7 @@ namespace TerrariaInGameWorldEditor.Common
             newTile.IsActuated = IsActuated;
             newTile.HasActuator = HasActuator;
             newTile.Slope = Slope;
+            newTile.IsTileFullbright = IsTileFullbright;
             return newTile;
         }
 
@@ -301,6 +304,14 @@ namespace TerrariaInGameWorldEditor.Common
             bw.Write((byte)tc.Slope);
             ChestData.Write(bw, tc.Container);
             TileEntityData.Write(bw, tc.Entity);
+            bw.Write(tc.IsTileFullbright);
+        }
+
+        public static TileCopy ReadV3TileCopy(BinaryReader br, HashSet<string> missingMods)
+        {
+            TileCopy tc = ReadV2TileCopy(br, missingMods);
+            tc.IsTileFullbright = br.ReadBoolean();
+            return tc;
         }
 
         public static TileCopy ReadV2TileCopy(BinaryReader br, HashSet<string> missingMods)

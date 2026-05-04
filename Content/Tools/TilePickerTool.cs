@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.Map;
 using Terraria.ModLoader;
@@ -35,10 +36,7 @@ namespace TerrariaInGameWorldEditor.Content.Tools
 
         public override void PostUpdateInput()
         {
-            Main.blockMouse = true;
-
-            // left click
-            if (Main.mouseLeft && Main.mouseLeftRelease && !Main.LocalPlayer.mouseInterface)
+            if (PlayerInput.Triggers.JustPressed.MouseLeft)
             {
                 Point point = new Point(Player.tileTargetX, Player.tileTargetY);
                 EditorSystem.Local.SelectedTile = new TileCopy(point.X, point.Y);

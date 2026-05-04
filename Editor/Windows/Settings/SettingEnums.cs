@@ -5,4 +5,10 @@
         Default,
         Custom
     }
+
+    public enum ToolInputMode
+    {
+        Click,
+        Drag
+    }
 }

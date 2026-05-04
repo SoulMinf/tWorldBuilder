@@ -52,7 +52,7 @@ namespace TerrariaInGameWorldEditor.Content.Tools
         public override void PostUpdateInput()
         {
             base.PostUpdateInput();
-            if (!Main.LocalPlayer.mouseInterface && EditorSystem.Local.CurrentSelection?.Count > 0 && !_isDragging)
+            if (EditorSystem.Local.CurrentSelection?.Count > 0 && !_isDragging)
             {
                 if (PlayerInput.Triggers.JustPressed.MouseLeft || PlayerInput.Triggers.JustPressed.MouseRight)
                 {
@@ -74,7 +74,7 @@ namespace TerrariaInGameWorldEditor.Content.Tools
                 }
             }
 
-            if (!Main.mouseLeft && Main.mouseLeftRelease && _isDraggingLeft)
+            if (PlayerInput.Triggers.JustReleased.MouseLeft && _isDraggingLeft)
             {
                 if (_selectionCopy != null)
                 {
@@ -85,7 +85,7 @@ namespace TerrariaInGameWorldEditor.Content.Tools
                     {
                         int x = tile.Key.X + point.X - _selectionCopy.GetMinX();
                         int y = tile.Key.Y + point.Y - _selectionCopy.GetMinY();
-                        _allTilesAffected.TryAddTile(new Point16(x, y), new TileCopy(Main.tile[x, y]));
+                        _allTilesAffected.TryAddTile(new Point16(x, y), new TileCopy(x, y));
                     }
                     ToolUtils.Paste(_selectionCopy, point, false);
 
@@ -111,7 +111,7 @@ namespace TerrariaInGameWorldEditor.Content.Tools
                 }
             }
 
-            if (!Main.mouseRight && Main.mouseRightRelease && _isDraggingRight)
+            if (PlayerInput.Triggers.JustReleased.MouseRight && _isDraggingRight)
             {
                 if (_selectionCopy != null)
                 {

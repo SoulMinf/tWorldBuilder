@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
+using Terraria.GameInput;
 using Terraria.ID;
 using TerrariaInGameWorldEditor.Common;
 using TerrariaInGameWorldEditor.Common.Utils;
@@ -98,10 +99,8 @@ namespace TerrariaInGameWorldEditor.Content.Tools
 
         public override void PostUpdateInput()
         {
-            Main.blockMouse = true;
-
             // left click
-            if (Main.mouseLeft && Main.mouseLeftRelease && !Main.LocalPlayer.mouseInterface)
+            if (PlayerInput.Triggers.JustPressed.MouseLeft)
             {
                 Point16 point = new Point16(Player.tileTargetX, Player.tileTargetY);
                 TileCopy clickedTile = new TileCopy(point.X, point.Y);

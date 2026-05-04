@@ -41,9 +41,8 @@ namespace TerrariaInGameWorldEditor.Content.Tools
 
         public override void PostUpdateInput()
         {
-            Main.blockMouse = true;
-
-            if (Main.mouseRight && Main.mouseRightRelease && !Main.LocalPlayer.mouseInterface)
+            // right click
+            if (PlayerInput.Triggers.JustPressed.MouseRight)
             {
                 EditorSystem.Local.CurrentTool = null;
             }

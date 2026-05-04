@@ -95,7 +95,6 @@ namespace TerrariaInGameWorldEditor.Content.Tools
 
         public override void PostUpdateInput()
         {
-            Main.blockMouse = true;
             if (Main.mouseLeftRelease && _isSelecting)
             {
                 _isSelecting = false;
@@ -151,7 +150,7 @@ namespace TerrariaInGameWorldEditor.Content.Tools
                 }
             }
 
-            if (Main.mouseLeft && !Main.LocalPlayer.mouseInterface)
+            if (Main.mouseLeft)
             {
                 if (!_isSelecting)
                 {
@@ -177,7 +176,7 @@ namespace TerrariaInGameWorldEditor.Content.Tools
             }
 
             // clear selection bounds with right click
-            if (Main.mouseRight && Main.mouseRightRelease && !Main.LocalPlayer.mouseInterface)
+            if (PlayerInput.Triggers.JustPressed.MouseRight)
             {
                 _selection.Clear();
             }

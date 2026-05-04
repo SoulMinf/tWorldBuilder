@@ -176,7 +176,7 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.Save
             {
                 return;
             }
-            byte version = 2;
+            byte version = 3;
             Stream fileStream = File.Create(path);
 
             // write header

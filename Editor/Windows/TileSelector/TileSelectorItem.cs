@@ -83,6 +83,8 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.TileSelector
                 tile.CheckingLiquid = false;
                 tile.HasActuator = false;
                 tile.TileFrameNumber = 0;
+                tile.LiquidAmount = 0;
+                tile.IsTileFullbright = false;
 
                 TileObjectData tileObjectData = TileObjectData.GetTileData(_createTile, _placeStyle, 0) ?? TileObjectData.GetTileData(_createTile, 0, 0);
                 if (tileObjectData != null)

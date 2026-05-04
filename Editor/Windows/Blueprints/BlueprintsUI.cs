@@ -171,6 +171,9 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.Blueprints
                     case 2:
                         return TileCollection.ReadV2TileCollection(collectionReader, out missingMods);
 
+                    case 3:
+                        return TileCollection.ReadV3TileCollection(collectionReader, out missingMods);
+
                     default:
                         throw new Exception($"Unknown twb file verson: {version}.");
                 }

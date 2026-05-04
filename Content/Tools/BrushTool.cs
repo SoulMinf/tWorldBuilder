@@ -110,8 +110,6 @@ namespace TerrariaInGameWorldEditor.Content.Tools
 
         public override void PostUpdateInput()
         {
-            Main.blockMouse = true;
-
             // on release (stop drawing)
             if (Main.mouseLeftRelease)
             {
@@ -128,7 +126,7 @@ namespace TerrariaInGameWorldEditor.Content.Tools
             }
 
             // on hold (draw) and not hovering over UI
-            if (Main.mouseLeft && !Main.LocalPlayer.mouseInterface && _brush.Count > 0)
+            if (Main.mouseLeft &&  _brush.Count > 0)
             {
                 int halfWidth = (int)Math.Floor(_brush.GetWidth() / 2f);
                 int halfHeight = (int)Math.Floor(_brush.GetHeight() / 2f);

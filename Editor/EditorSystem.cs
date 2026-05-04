@@ -66,6 +66,7 @@ namespace TerrariaInGameWorldEditor.Editor
         public bool IsEditorVisible => _mainUIState.Visible;
         private EditorUI _mainUIState;
         private UserInterface _mainUserInterface;
+        private bool _wasSmartCursorActive = false;
 
         // windows
         private TileSelectorUI _selectTileUIState;
@@ -77,7 +78,7 @@ namespace TerrariaInGameWorldEditor.Editor
         // tools
         public List<Tool> Tools { get; private set; }
         private PasteTool _pasteTool;
-        public bool CanPaste { get; set; }
+        public bool CanPaste { get; set; } = true;
         private Tool _currentTool;
         public Tool CurrentTool
         {
@@ -186,10 +187,10 @@ namespace TerrariaInGameWorldEditor.Editor
             if (!Main.dedServ)
             {
                 Local = this;
-                _pasteTool = new PasteTool();
-                Tools = new List<Tool> { new BrushTool(), new EraseTool(), new LineTool(), new ShapesTool(), new PaintBucketTool(), new TilePickerTool(), new BoxSelectionTool(), new MagicWandTool(), new LassoTool(), new MoveTool() };
                 Settings = new TIGWESettings(); // just some default settings to use so settings arent null during load
                 Settings = TIGWESettings.Load($"{ModLoader.ModPath.Replace("\\Mods", "")}\\{TerrariaInGameWorldEditor.MODNAME}\\settings");
+                _pasteTool = new PasteTool();
+                Tools = new List<Tool> { new BrushTool(), new EraseTool(), new LineTool(), new ShapesTool(), new PaintBucketTool(), new TilePickerTool(), new BoxSelectionTool(), new MagicWandTool(), new LassoTool(), new MoveTool() };
 
                 // ui stuff
                 _mainUIState = new EditorUI();
@@ -215,10 +216,9 @@ namespace TerrariaInGameWorldEditor.Editor
                 // smart cursor kinda messes with the drawing/pasting since the tools use tileTargetX/Y
                 // so we want to make sure its always off when the editor is open
                 On_Player.TryToToggleSmartCursor += DisableSmartCursor;
-                On_LanguageManager.ReloadLanguage += (On_LanguageManager.orig_ReloadLanguage orig, LanguageManager self, bool resetValuesToKeysFirst) =>
+                LanguageManager.Instance.OnLanguageChanged += (_) =>
                 {
                     LanguageChange = true;
-                    orig(self, resetValuesToKeysFirst);
                 };
                 On_Main.ClampScreenPositionToWorld += OverrideScreenClamp;
             }
@@ -250,11 +250,12 @@ namespace TerrariaInGameWorldEditor.Editor
 
         private void DisableSmartCursor(On_Player.orig_TryToToggleSmartCursor orig, Player self, ref bool smartCursorWanted)
         {
-            if (!_mainUIState.Visible)
+            if (_mainUIState.Visible)
             {
-                orig(self, ref smartCursorWanted);
+                smartCursorWanted = false;
+                return;
             }
-            smartCursorWanted = false;
+            orig(self, ref smartCursorWanted);
         }
 
         private void DrawPlayerChat(ILContext il)
@@ -599,6 +600,8 @@ namespace TerrariaInGameWorldEditor.Editor
                     Main.LocalPlayer.Teleport(screenPos);
                 }
                 Main.blockInput = false;
+                Main.SmartCursorWanted_Mouse = _wasSmartCursorActive;
+                Main.SmartCursorWanted_GamePad = _wasSmartCursorActive;
             }
             else
             {
@@ -611,7 +614,9 @@ namespace TerrariaInGameWorldEditor.Editor
                 Main.ingameOptionsWindow = false;
                 _screenPositionOffset = Main.screenPosition;
                 Main.blockInput = true;
+                _wasSmartCursorActive = Main.SmartCursorIsUsed;
                 Main.SmartCursorWanted_Mouse = false;
+                Main.SmartCursorWanted_GamePad = false;
             }
         }
 
