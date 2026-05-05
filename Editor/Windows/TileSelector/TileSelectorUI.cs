@@ -213,7 +213,6 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.TileSelector
                         _currentTileCopy.WallFrameY = tc.WallFrameY;
                         SetCurrentTileCopy(_currentTileCopy);
                     };
-                    tileItem.HoverText = LocalizationUtils.GetTextValue("Windows.TileSelector.HoverText.TileItem", tileItem.Name);
                 }
             }
             tileGrid.AddRange(items);

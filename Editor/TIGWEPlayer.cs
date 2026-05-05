@@ -1,4 +1,5 @@
-﻿using Terraria.ModLoader;
+﻿using Terraria.DataStructures;
+using Terraria.ModLoader;
 using TerrariaInGameWorldEditor.Common.Utils;
 using TerrariaInGameWorldEditor.Content;
 
@@ -17,6 +18,24 @@ namespace TerrariaInGameWorldEditor.Editor
             if (EditorSystem.Local.LanguageChange)
             {
                 TerrariaInGameWorldEditor.NewText(LocalizationUtils.GetTextValue("Editor.System.Messages.LanguageChange"));
+            }
+        }
+
+        public override bool ImmuneTo(PlayerDeathReason damageSource, int cooldownCounter, bool dodgeable)
+        {
+            if (EditorSystem.Local.GodMode)
+            {
+                return true;
+            }
+            return base.ImmuneTo(damageSource, cooldownCounter, dodgeable);
+        }
+
+        public override void PreUpdate()
+        {
+            base.PreUpdate();
+            if (EditorSystem.Local.GodMode)
+            {
+                Player.statLife = Player.statLifeMax2;
             }
         }
     }

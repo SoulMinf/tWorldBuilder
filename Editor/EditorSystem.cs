@@ -10,6 +10,7 @@ using Terraria.GameContent.Creative;
 using Terraria.GameContent.UI.Chat;
 using Terraria.GameInput;
 using Terraria.ID;
+using Terraria.IO;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
@@ -67,6 +68,7 @@ namespace TerrariaInGameWorldEditor.Editor
         private EditorUI _mainUIState;
         private UserInterface _mainUserInterface;
         private bool _wasSmartCursorActive = false;
+        public bool GodMode { get; set; } = true;
 
         // windows
         private TileSelectorUI _selectTileUIState;
@@ -161,12 +163,35 @@ namespace TerrariaInGameWorldEditor.Editor
         // language
         public bool LanguageChange { get; set; } = false;
 
+        private void ResetEditor()
+        {
+            if (_mainUIState != null && _mainUIState.Visible)
+            {
+                if (UseCustomScale)
+                {
+                    Main.UIScale = _actualScale;
+                }
+                Main.blockInput = false;
+                Main.SmartCursorWanted_Mouse = _wasSmartCursorActive;
+                Main.SmartCursorWanted_GamePad = _wasSmartCursorActive;
+                GodMode = false;
+                _mainUIState.Visible = false;
+                CurrentTool = null;
+            }
+        }
+
         public override void OnModUnload()
         {
             base.OnModUnload();
             if (!Main.dedServ)
             {
+                ResetEditor();
                 Local = null;
+                IL_RemadeChatMonitor.DrawChat -= DrawChat;
+                IL_Main.DrawPlayerChat -= DrawPlayerChat;
+                On_Player.TryToToggleSmartCursor -= DisableSmartCursor;
+                LanguageManager.Instance.OnLanguageChanged -= LanguageChanged;
+                On_Main.ClampScreenPositionToWorld -= OverrideScreenClamp;
                 TIGWESettings.Save($"{ModLoader.ModPath.Replace("\\Mods", "")}\\{TerrariaInGameWorldEditor.MODNAME}\\settings", Settings);
             }
         }
@@ -176,6 +201,7 @@ namespace TerrariaInGameWorldEditor.Editor
             base.OnWorldUnload();
             if (!Main.dedServ)
             {
+                ResetEditor();
                 TIGWESettings.Save($"{ModLoader.ModPath.Replace("\\Mods", "")}\\{TerrariaInGameWorldEditor.MODNAME}\\settings", Settings);
             }
         }
@@ -216,10 +242,7 @@ namespace TerrariaInGameWorldEditor.Editor
                 // smart cursor kinda messes with the drawing/pasting since the tools use tileTargetX/Y
                 // so we want to make sure its always off when the editor is open
                 On_Player.TryToToggleSmartCursor += DisableSmartCursor;
-                LanguageManager.Instance.OnLanguageChanged += (_) =>
-                {
-                    LanguageChange = true;
-                };
+                LanguageManager.Instance.OnLanguageChanged += LanguageChanged;
                 On_Main.ClampScreenPositionToWorld += OverrideScreenClamp;
             }
 
@@ -231,6 +254,11 @@ namespace TerrariaInGameWorldEditor.Editor
             tile.TileFrameX = 18;
             tile.TileFrameY = 18;
             SelectedTile = new TileCopy(tile);
+        }
+
+        private void LanguageChanged(LanguageManager languageManager)
+        {
+            LanguageChange = true;
         }
 
         private void OverrideScreenClamp(On_Main.orig_ClampScreenPositionToWorld orig)
@@ -592,7 +620,7 @@ namespace TerrariaInGameWorldEditor.Editor
                 {
                     Main.UIScale = _actualScale;
                 }
-                CreativePowerManager.Instance.GetPower<CreativePowers.GodmodePower>().SetEnabledState(Main.LocalPlayer.whoAmI, false);
+                GodMode = false;
                 CurrentTool = null;
                 if (Local.Settings.ShouldTeleportOnEditorClosed)
                 {
@@ -610,7 +638,7 @@ namespace TerrariaInGameWorldEditor.Editor
                     _actualScale = Main.UIScale;
                     Main.UIScale = Scale;
                 }
-                CreativePowerManager.Instance.GetPower<CreativePowers.GodmodePower>().SetEnabledState(Main.LocalPlayer.whoAmI, true);
+                GodMode = true;
                 Main.ingameOptionsWindow = false;
                 _screenPositionOffset = Main.screenPosition;
                 Main.blockInput = true;
@@ -668,10 +696,19 @@ namespace TerrariaInGameWorldEditor.Editor
             TileCollection redo = _redoHistory[_redoHistory.Count - 1];
 
             // same as undo pretty much
+            int maxX = Main.maxTilesX;
+            int maxY = Main.maxTilesY;
             foreach (var tile in redo)
             {
-                undo.TryAddTile(new Point16(tile.Key.X, tile.Key.Y), new TileCopy(tile.Key.X, tile.Key.Y));
-                Main.tile[tile.Key.X, tile.Key.Y].CopyFrom(tile.Value.GetAsTile());
+                int tx = tile.Key.X;
+                int ty = tile.Key.Y;
+                if (tx < 0 || tx >= maxX || ty < 0 || ty >= maxY)
+                {
+                    continue;
+                }
+
+                undo.TryAddTile(new Point16(tx, ty), new TileCopy(tx, ty));
+                Main.tile[tx, ty].CopyFrom(tile.Value.GetAsTile());
             }
             if (Main.netMode == NetmodeID.MultiplayerClient)
             {
@@ -687,10 +724,19 @@ namespace TerrariaInGameWorldEditor.Editor
             TileCollection undo = _undoHistory[_undoHistory.Count - 1];
 
             // go over all the tiles in the most recently added tile collection to undo
+            int maxX = Main.maxTilesX;
+            int maxY = Main.maxTilesY;
             foreach (var tile in undo)
             {
-                redo.TryAddTile(new Point16(tile.Key.X, tile.Key.Y), new TileCopy(tile.Key.X, tile.Key.Y));
-                Main.tile[tile.Key.X, tile.Key.Y].CopyFrom(tile.Value.GetAsTile());
+                int tx = tile.Key.X;
+                int ty = tile.Key.Y;
+                if (tx < 0 || tx >= maxX || ty < 0 || ty >= maxY)
+                {
+                    continue;
+                }
+
+                redo.TryAddTile(new Point16(tx, ty), new TileCopy(tx, ty));
+                Main.tile[tx, ty].CopyFrom(tile.Value.GetAsTile());
             }
             if (Main.netMode == NetmodeID.MultiplayerClient)
             {

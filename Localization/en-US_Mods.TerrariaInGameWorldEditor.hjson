@@ -417,5 +417,6 @@ Tools: {
 			[c/EAD87A:Right Mouse:] Move selection area
 			'''
 		InfoText: "[c/EAD87A:Tile count:] {0}"
+		Messages.NoSelection: You need a selection active to use this tool.
 	}
 }

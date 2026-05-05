@@ -19,9 +19,9 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.Settings
             On_TileLightScanner.ApplySurfaceLight += ApplyFullbright5;
         }
 
-        public override void Unload()
+        public override void OnModUnload()
         {
-            base.Unload();
+            base.OnModUnload();
             On_TileLightScanner.ApplyTileLight -= ApplyFullbright1;
             On_TileLightScanner.ApplyWallLight -= ApplyFullbright2;
             On_TileLightScanner.ApplyLiquidLight -= ApplyFullbright3;

@@ -52,6 +52,11 @@ namespace TerrariaInGameWorldEditor.Content.Tools
         public override void PostUpdateInput()
         {
             base.PostUpdateInput();
+            if (EditorSystem.Local.CurrentSelection?.Count == 0 && PlayerInput.Triggers.JustPressed.MouseLeft)
+            {
+                TerrariaInGameWorldEditor.NewText(LocalizationUtils.GetTextValue("Tools.MoveTool.Messages.NoSelection"));
+            }
+
             if (EditorSystem.Local.CurrentSelection?.Count > 0 && !_isDragging)
             {
                 if (PlayerInput.Triggers.JustPressed.MouseLeft || PlayerInput.Triggers.JustPressed.MouseRight)

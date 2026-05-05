@@ -8,6 +8,7 @@ using Terraria.ModLoader;
 using Terraria.ObjectData;
 using Terraria.UI;
 using TerrariaInGameWorldEditor.Common;
+using TerrariaInGameWorldEditor.Common.Utils;
 using TerrariaInGameWorldEditor.UIElements.ImageResizeable;
 
 namespace TerrariaInGameWorldEditor.Editor.Windows.TileSelector
@@ -26,7 +27,8 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.TileSelector
         {
             // load item
             Item item = ContentSamples.ItemsByType[itemId];
-            Name = Lang.GetItemName(itemId).Value;
+            string[] name = ItemID.Search.GetName(itemId).Split('/');
+            Name = name.Length > 1 ? name[1] : name[0];
             ItemId = itemId;
             _createTile = item.createTile;
             _createWall = item.createWall;
@@ -40,6 +42,12 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.TileSelector
             Append(body);
             Width.Set(44, 0);
             Height.Set(44, 0);
+        }
+
+        public string GetResolvedName()
+        {
+            string localized = Lang.GetItemName(ItemId).Value;
+            return string.IsNullOrEmpty(localized) ? Name : localized;
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -56,7 +64,7 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.TileSelector
             spriteBatch.Draw(tex, new Rectangle((int)(dimensions.X + dimensions.Width / 2 - tex.Width * scale / 2), (int)(dimensions.Y + dimensions.Height / 2 - tex.Height * scale / 2), (int)(tex.Width * scale), (int)(tex.Height * scale)), Color.White);
             if (IsMouseHovering)
             {
-                Main.instance.MouseText(HoverText);
+                Main.instance.MouseText(LocalizationUtils.GetTextValue("Windows.TileSelector.HoverText.TileItem", GetResolvedName()));
             }
         }
 
@@ -138,6 +146,12 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.TileSelector
                     // place temp tile
                     int tempX = 10;
                     int tempY = 10;
+
+                    // kill the ones beside it to make sure they dont blend
+                    WorldGen.KillTile(tempX + 1, tempY, false, false, true);
+                    WorldGen.KillTile(tempX - 1, tempY, false, false, true);
+                    WorldGen.KillTile(tempX, tempY + 1, false, false, true);
+                    WorldGen.KillTile(tempX, tempY - 1, false, false, true);
                     WorldGen.PlaceTile(tempX, tempY, _createTile, true, false, -1, _placeStyle);
 
                     // get TileFrameY and TileFrameX

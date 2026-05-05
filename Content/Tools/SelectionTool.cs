@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using TerrariaInGameWorldEditor.Common;
+﻿using TerrariaInGameWorldEditor.Common;
 
 namespace TerrariaInGameWorldEditor.Content.Tools
 {
