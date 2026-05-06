@@ -56,7 +56,7 @@ namespace TerrariaInGameWorldEditor.UIElements.TextField
             _searchIcon = ModContent.Request<Texture2D>($"{UIElementUtils.Path}/UIElements/TextField/SearchIcon");
             _background = new TIGWEImageResizeable(ModContent.Request<Texture2D>($"{UIElementUtils.Path}/UIElements/Assets/Texture"));
             _background.TextureHover = ModContent.Request<Texture2D>($"{UIElementUtils.Path}/UIElements/Assets/TextureHover");
-            _background.OnLeftClick += (evt, listeningElement) =>
+            _background.OnLeftClick += (_, _) =>
             {
                 if (CanFocus)
                 {
@@ -124,11 +124,10 @@ namespace TerrariaInGameWorldEditor.UIElements.TextField
             _tfText.SetText(text);
 
             // text scroll thing
-            if (_textWidth > Width.Pixels && !IsFocused)
+            if (_textWidth > _clipContainer.Width.Pixels && !IsFocused)
             {
                 _textScroll += _scrollRight ? 0.3f : -0.3f;
-                _tfText.Left.Set(_tfText.Left.Pixels + _textScroll, 0);
-                if (_textWidth + _textScroll < Width.Pixels - 26)
+                if (_textWidth + _textScroll < _clipContainer.Width.Pixels - 20)
                 {
                     _scrollRight = true;
                 }
@@ -141,7 +140,7 @@ namespace TerrariaInGameWorldEditor.UIElements.TextField
             else
             {
                 _textScroll = 0;
-                _tfText.Left.Set(Math.Clamp(Width.Pixels - _textWidth - 26, int.MinValue, -6), 0);
+                _tfText.Left.Set(Math.Clamp(_clipContainer.Width.Pixels - _textWidth - 20, int.MinValue, -6), 0);
             }
 
             if (IsFocused)
@@ -182,7 +181,7 @@ namespace TerrariaInGameWorldEditor.UIElements.TextField
             _background.Width.Set(Width.Pixels, 0);
             _background.Height.Set(Height.Pixels, 0);
             _clipContainer.Left.Set(6, 0);
-            _clipContainer.Width.Set(Width.Pixels - 12, 0);
+            _clipContainer.Width.Set(Width.Pixels - 12 - (ShowSearchIcon ? 18 : 0), 0);
             _clipContainer.Height.Set(Height.Pixels, 0);
         }
 

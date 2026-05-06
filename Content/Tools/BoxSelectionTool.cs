@@ -103,13 +103,13 @@ namespace TerrariaInGameWorldEditor.Content.Tools
                 Color color = EditorSystem.Local.Settings.ToolColor;
                 if (_selection.Count > 0)
                 {
-                    if (PlayerInput.GetPressedKeys().Contains(Keys.LeftShift))
-                    {
-                        color = Color.IndianRed;
-                    }
                     if (PlayerInput.GetPressedKeys().Contains(Keys.LeftControl))
                     {
                         color = Color.ForestGreen;
+                    }
+                    if (PlayerInput.GetPressedKeys().Contains(Keys.LeftShift))
+                    {
+                        color = Color.IndianRed;
                     }
                 }
                 DrawUtils.DrawRectangleOutline(selection, color);
