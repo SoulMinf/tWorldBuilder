@@ -124,7 +124,7 @@ namespace TerrariaInGameWorldEditor.UIElements.TextField
             _tfText.SetText(text);
 
             // text scroll thing
-            if (_textWidth > _clipContainer.Width.Pixels && !IsFocused)
+            if (_textWidth > Width.Pixels && !IsFocused)
             {
                 _textScroll += _scrollRight ? 0.3f : -0.3f;
                 if (_textWidth + _textScroll < _clipContainer.Width.Pixels - 20)
@@ -140,7 +140,14 @@ namespace TerrariaInGameWorldEditor.UIElements.TextField
             else
             {
                 _textScroll = 0;
-                _tfText.Left.Set(Math.Clamp(_clipContainer.Width.Pixels - _textWidth - 20, int.MinValue, -6), 0);
+                if (IsFocused)
+                {
+                    _tfText.Left.Set(Math.Clamp(_clipContainer.Width.Pixels - _textWidth - 20, int.MinValue, -6), 0);
+                }
+                else
+                {
+                    _tfText.Left.Set(-6, 0);
+                }
             }
 
             if (IsFocused)
