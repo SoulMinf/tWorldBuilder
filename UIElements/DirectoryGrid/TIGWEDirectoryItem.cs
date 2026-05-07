@@ -147,28 +147,35 @@ namespace TerrariaInGameWorldEditor.UIElements.DirectoryGrid
 
         public void StartDelete()
         {
-            if (!_isDeleting)
+            try
             {
-                _deleteButton.SetImage(ModContent.Request<Texture2D>($"{UIElementUtils.Path}/UIElements/DirectoryGrid/DeleteConfirm"));
-                _deleteButton.HoverText = LocalizationUtils.GetTextValue("UIElements.DirectoryItem.HoverText.ConfirmDelete");
-                _isDeleting = true;
-            }
-            else
-            {
-                if (this is TIGWEDirectoryFile) // if its a file
+                if (!_isDeleting)
                 {
-                    File.Delete(FullPath);
+                    _deleteButton.SetImage(ModContent.Request<Texture2D>($"{UIElementUtils.Path}/UIElements/DirectoryGrid/DeleteConfirm"));
+                    _deleteButton.HoverText = LocalizationUtils.GetTextValue("UIElements.DirectoryItem.HoverText.ConfirmDelete");
+                    _isDeleting = true;
                 }
-                else if (this is TIGWEDirectoryFolder folder) // if it's a directory
+                else
                 {
-                    // remove all its children from the grid before deleting
-                    folder.Close();
-                    Directory.Delete(FullPath, true);
-                }
+                    if (this is TIGWEDirectoryFile) // if its a file
+                    {
+                        File.Delete(FullPath);
+                    }
+                    else if (this is TIGWEDirectoryFolder folder) // if it's a directory
+                    {
+                        // remove all its children from the grid before deleting
+                        folder.Close();
+                        Directory.Delete(FullPath, true);
+                    }
 
-                // remove from the grid
-                _parentFolder?.RemoveContentChild(this);
-                _parentGrid.Remove(this);
+                    // remove from the grid
+                    _parentFolder?.RemoveContentChild(this);
+                    _parentGrid.Remove(this);
+                }
+            } 
+            catch (Exception ex)
+            {
+                TerrariaInGameWorldEditor.Error(LocalizationUtils.GetTextValue("UIElements.DirectoryItem.Exceptions.DeleteFail"), ex);
             }
         }
 

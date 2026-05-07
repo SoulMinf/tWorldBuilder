@@ -241,7 +241,10 @@ UIElements: {
 			Select: Select
 		}
 
-		Exceptions.RenameFail: Failed to rename, a file or folder with that name likely already exist.
+		Exceptions: {
+			RenameFail: Failed to rename, a file or folder with that name likely already exist.
+			DeleteFail: Failed to delete, a file or folder with that name wasn't found. Maybe it has been deleted or renamed from somewhere else?
+		}
 	}
 
 	TextField.PlaceholderText: Enter text...
