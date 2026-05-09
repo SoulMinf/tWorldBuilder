@@ -112,7 +112,9 @@ Windows: {
 			Theme: Theme:
 			PrimaryColor: Primary color
 			SecondaryColor: Secondary color
+			GodMode: Enable godmode while editor is active:
 			TeleportToEditor: Teleport to editor location when closing editor:
+			EditorBaseSpeed: Editor base movement speed:
 			Fullbright: Fullbright enabled:
 			SelectionActiveText: Show text for when a selection area is active:
 			MaxUndoRedo: Max undo/redo actions to keep in memory:
@@ -273,6 +275,8 @@ Tools: {
 			[c/EAD87A:Shift + Left Mouse:] Remove from selection
 			'''
 		InfoText: "[c/EAD87A:Tile count:] {0}"
+		Messages.AreaTooBig: Area too big to select.
+		Settings.QuickSelect: Quick select:
 	}
 
 	BoxSelectionTool: {
@@ -330,8 +334,6 @@ Tools: {
 				Liquid: Liquid
 			}
 		}
-
-		Messages.AreaTooBig: Area too big to select.
 	}
 
 	LassoTool: {
@@ -368,11 +370,14 @@ Tools: {
 		}
 	}
 
-	PaintBucketTool.HoverText:
-		'''
-		Paint Bucket
-		[c/EAD87A:Left Mouse:] Fill area
-		'''
+	PaintBucketTool: {
+		HoverText:
+			'''
+			Paint Bucket
+			[c/EAD87A:Left Mouse:] Fill area
+			'''
+		Messages.AreaTooBig: Area too big to fill.
+	}
 
 	PasteTool: {
 		InfoText: "[c/EAD87A:Tile count:] {0}"

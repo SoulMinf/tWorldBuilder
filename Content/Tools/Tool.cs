@@ -11,6 +11,16 @@ namespace TerrariaInGameWorldEditor.Content.Tools
         public TIGWEButton ToggleToolButton { get; protected set; }
         public List<(string, UIElement)> Settings { get; protected set; } = new List<(string, UIElement)>();
 
+        public virtual void OnToolSelect()
+        {
+
+        }
+
+        public virtual void OnToolUnselect()
+        {
+
+        }
+
         public virtual string GetInfoText()
         {
             return "";

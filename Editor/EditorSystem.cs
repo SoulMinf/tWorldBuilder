@@ -87,7 +87,9 @@ namespace TerrariaInGameWorldEditor.Editor
             get => _currentTool;
             set
             {
+                _currentTool?.OnToolUnselect();
                 _currentTool = value;
+                _currentTool?.OnToolSelect();
                 _mainUIState.RecalculateToolSettings();
             }
         }
@@ -427,6 +429,10 @@ namespace TerrariaInGameWorldEditor.Editor
             {
                 return;
             }
+            if (_mainUIState.Visible)
+            {
+                Main.blockInput = true;
+            }
 
             // update input for the ui and tool
             _mainUIState.PostUpdateInput();
@@ -570,19 +576,19 @@ namespace TerrariaInGameWorldEditor.Editor
                 int mult = Keybinds.FastMoveMK.Current ? 3 : 1;
                 if (PlayerInput.Triggers.Current.KeyStatus["Up"] || PlayerInput.Triggers.Current.KeyStatus["Jump"])
                 {
-                    _screenPositionOffset.Y -= 10 * mult;
+                    _screenPositionOffset.Y -= Settings.EditorBaseSpeed * mult;
                 }
                 if (PlayerInput.Triggers.Current.KeyStatus["Down"])
                 {
-                    _screenPositionOffset.Y += 10 * mult;
+                    _screenPositionOffset.Y += Settings.EditorBaseSpeed * mult;
                 }
                 if (PlayerInput.Triggers.Current.KeyStatus["Left"])
                 {
-                    _screenPositionOffset.X -= 10 * mult;
+                    _screenPositionOffset.X -= Settings.EditorBaseSpeed * mult;
                 }
                 if (PlayerInput.Triggers.Current.KeyStatus["Right"])
                 {
-                    _screenPositionOffset.X += 10 * mult;
+                    _screenPositionOffset.X += Settings.EditorBaseSpeed * mult;
                 }
                 _screenPositionOffset = Vector2.Clamp(_screenPositionOffset, new Vector2(-16, -16), new Vector2(Main.maxTilesX * 16 + 16, Main.maxTilesY * 16 + 16));
             }
@@ -597,6 +603,7 @@ namespace TerrariaInGameWorldEditor.Editor
                 Main.screenPosition = _screenPositionOffset;
             }
         }
+
 
         public override void PostUpdatePlayers()
         {

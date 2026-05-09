@@ -23,7 +23,7 @@ namespace TerrariaInGameWorldEditor.Editor
 
         public override bool ImmuneTo(PlayerDeathReason damageSource, int cooldownCounter, bool dodgeable)
         {
-            if (EditorSystem.Local.GodMode)
+            if (EditorSystem.Local.GodMode && EditorSystem.Local.Settings.ShouldEnableGodMode)
             {
                 return true;
             }
@@ -33,7 +33,7 @@ namespace TerrariaInGameWorldEditor.Editor
         public override void PreUpdate()
         {
             base.PreUpdate();
-            if (EditorSystem.Local.GodMode)
+            if (EditorSystem.Local.GodMode && EditorSystem.Local.Settings.ShouldEnableGodMode)
             {
                 Player.statLife = Player.statLifeMax2;
             }

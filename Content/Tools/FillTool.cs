@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameInput;
 using Terraria.ID;
 using TerrariaInGameWorldEditor.Common;
 using TerrariaInGameWorldEditor.Common.Utils;
+using TerrariaInGameWorldEditor.Editor;
 using TerrariaInGameWorldEditor.UIElements.CheckBox;
 using TerrariaInGameWorldEditor.UIElements.DropDown;
 using TerrariaInGameWorldEditor.UIElements.NumberField;
@@ -25,9 +27,16 @@ namespace TerrariaInGameWorldEditor.Content.Tools
         }
         protected Target _mode = Target.Auto;
         protected TIGWEDropDown<Target> _targetDropDown;
+        protected Func<bool> _selectCondition;
+        private HashSet<Point16> _lastFailedCoordsToAdd = new HashSet<Point16>();
 
         public FillTool()
         {
+            _selectCondition = () =>
+            {
+                return PlayerInput.Triggers.JustPressed.MouseLeft;
+            };
+
             // settings
             // tile cap
             _tileCapField = new TIGWENumberField(_tileCap, minValue: 1);
@@ -57,8 +66,23 @@ namespace TerrariaInGameWorldEditor.Content.Tools
 
         }
 
+        protected virtual void OnFillFailed()
+        {
+
+        }
+
+        public override void OnToolUnselect()
+        {
+            base.OnToolUnselect();
+            _lastFailedCoordsToAdd.Clear();
+        }
+
         protected virtual bool IsMatch(Point16 coords, TileCopy clickedTile)
         {
+            if (clickedTile == null)
+            {
+                return false;
+            }
             Tile tile = Main.tile[coords.X, coords.Y];
             switch (_mode)
             {
@@ -73,6 +97,10 @@ namespace TerrariaInGameWorldEditor.Content.Tools
                     }
                     if (tile.LiquidAmount != 0 || clickedTile.LiquidAmount != 0)
                     {
+                        if ((tile.LiquidAmount > 0 && clickedTile.LiquidAmount == 0) || (clickedTile.LiquidAmount > 0 && tile.LiquidAmount == 0))
+                        {
+                            return false;
+                        }
                         return tile.LiquidAmount != 0 && tile.LiquidType == clickedTile.LiquidType;
                     }
                     return tile.TileType == clickedTile.TileType;
@@ -99,27 +127,28 @@ namespace TerrariaInGameWorldEditor.Content.Tools
 
         public override void PostUpdateInput()
         {
+            Point16 clickedTileCoords = new Point16(Player.tileTargetX, Player.tileTargetY);
+
             // left click
-            if (PlayerInput.Triggers.JustPressed.MouseLeft)
+            if (_selectCondition() && !_lastFailedCoordsToAdd.Contains(clickedTileCoords))
             {
-                Point16 point = new Point16(Player.tileTargetX, Player.tileTargetY);
-                TileCopy clickedTile = new TileCopy(point.X, point.Y);
+                TileCopy clickedTile = new TileCopy(clickedTileCoords.X, clickedTileCoords.Y);
 
                 int count = 0;
-                TileCollection tilesToAdd = new TileCollection();
+                HashSet<Point16> coordsToAdd = new HashSet<Point16>();
 
                 Queue<Point16> queue = new Queue<Point16>();
-                queue.Enqueue(new Point16(point.X, point.Y));
+                queue.Enqueue(new Point16(clickedTileCoords.X, clickedTileCoords.Y));
 
                 // go until we hit the tilecap or cant find any more tiles that we think match
                 while (queue.Count > 0 && count <= _tileCap)
                 {
                     Point16 coords = queue.Dequeue();
 
-                    if (IsMatch(coords, clickedTile))
+                    if (IsMatch(coords, clickedTile) && EditorSystem.Local.CurrentSelection.ContainsCoord(coords) == EditorSystem.Local.CurrentSelection.ContainsCoord(clickedTileCoords))
                     {
                         // if we dont already have it added, add it
-                        if (tilesToAdd.TryAddTile(coords, new TileCopy(coords.X, coords.Y)))
+                        if (coordsToAdd.Add(coords))
                         {
                             count++;
                         }
@@ -144,7 +173,7 @@ namespace TerrariaInGameWorldEditor.Content.Tools
 
                         foreach (Point16 direction in directions)
                         {
-                            if (!tilesToAdd.ContainsCoord(direction) && !queue.Contains(direction))
+                            if (!coordsToAdd.Contains(direction) && !queue.Contains(direction))
                             {
                                 queue.Enqueue(direction);
                             }
@@ -153,12 +182,18 @@ namespace TerrariaInGameWorldEditor.Content.Tools
                 }
                 if (count > _tileCap)
                 {
-                    tilesToAdd.Clear(); // just remove the tiles we wanted to add
-                    TerrariaInGameWorldEditor.NewText(LocalizationUtils.GetTextValue("Tools.FillTool.Messages.AreaTooBig"));
+                    OnFillFailed();
+                    _lastFailedCoordsToAdd = coordsToAdd;
                 }
                 else
                 {
+                    TileCollection tilesToAdd = new TileCollection();
+                    foreach (Point16 coord in coordsToAdd)
+                    {
+                        tilesToAdd.TryAddTile(coord, new TileCopy(coord.X, coord.Y));
+                    }
                     OnFill(tilesToAdd);
+                    _lastFailedCoordsToAdd.Clear();
                 }
             }
         }

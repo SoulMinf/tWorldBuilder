@@ -146,7 +146,12 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.Settings
             theme.OptionElement.Height.Set(26, 0);
             theme.OptionElement.Width.Set(150, 0);
             editorSettings.AddOption(themeOptions);
-            settingCategories.Add(editorSettings);  
+            SettingsOption<TIGWECheckBox> godMode = new SettingsOption<TIGWECheckBox>(LocalizationUtils.GetTextValue("Windows.Settings.Settings.GodMode"), new TIGWECheckBox());
+            editorSettings.AddOption(godMode);
+            godMode.OptionElement.OnCheckedChanged += (check) =>
+            {
+                EditorSystem.Local.Settings.ShouldEnableGodMode = check;
+            };
             SettingsOption<TIGWECheckBox> teleport = new SettingsOption<TIGWECheckBox>(LocalizationUtils.GetTextValue("Windows.Settings.Settings.TeleportToEditor"), new TIGWECheckBox());
             editorSettings.AddOption(teleport);
             teleport.OptionElement.OnCheckedChanged += (check) =>
@@ -159,6 +164,14 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.Settings
             {
                 EditorSystem.Local.Settings.FullbrightEnabled = check;
             };
+            SettingsOption<TIGWENumberField> editorBaseSpeed = new SettingsOption<TIGWENumberField>(LocalizationUtils.GetTextValue("Windows.Settings.Settings.EditorBaseSpeed"), new TIGWENumberField(10, 100, 0));
+            editorSettings.AddOption(editorBaseSpeed);
+            editorBaseSpeed.OptionElement.OnValueChanged += (newValue) =>
+            {
+                EditorSystem.Local.Settings.EditorBaseSpeed = newValue;
+            };
+            editorBaseSpeed.OptionElement.Width.Set(100, 0);
+            editorBaseSpeed.OptionElement.Height.Set(26, 0);
             SettingsOption<TIGWECheckBox> selectionActiveText = new SettingsOption<TIGWECheckBox>(LocalizationUtils.GetTextValue("Windows.Settings.Settings.SelectionActiveText"), new TIGWECheckBox());
             editorSettings.AddOption(selectionActiveText);
             selectionActiveText.OptionElement.OnCheckedChanged += (check) =>
@@ -173,6 +186,7 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.Settings
             };
             historyLimit.OptionElement.Width.Set(100, 0);
             historyLimit.OptionElement.Height.Set(26, 0);
+            settingCategories.Add(editorSettings);
 
             // tool settings
             SettingsCategory toolSettings = new SettingsCategory(LocalizationUtils.GetTextValue("Windows.Settings.Categories.ToolSettings"));
@@ -258,6 +272,8 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.Settings
             primaryColor.OptionElement.SetColorPremultipled(EditorSystem.Local.Settings.PrimaryColor);
             secondaryColor.OptionElement.SetColorPremultipled(EditorSystem.Local.Settings.SecondaryColor);
             inputMode.OptionElement.SetSelectedValue(EditorSystem.Local.Settings.InputMode);
+            godMode.OptionElement.IsChecked = EditorSystem.Local.Settings.ShouldEnableGodMode;
+            editorBaseSpeed.OptionElement.SetValue(EditorSystem.Local.Settings.EditorBaseSpeed);
         }
     }
 }
