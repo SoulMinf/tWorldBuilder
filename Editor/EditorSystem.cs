@@ -66,7 +66,6 @@ namespace TerrariaInGameWorldEditor.Editor
         private EditorUI _mainUIState;
         private UserInterface _mainUserInterface;
         private bool _wasSmartCursorActive = false;
-        public bool GodMode { get; set; } = false;
 
         // windows
         private TileSelectorUI _selectTileUIState;
@@ -174,7 +173,6 @@ namespace TerrariaInGameWorldEditor.Editor
                 Main.blockInput = false;
                 Main.SmartCursorWanted_Mouse = _wasSmartCursorActive;
                 Main.SmartCursorWanted_GamePad = _wasSmartCursorActive;
-                GodMode = false;
                 _mainUIState.Visible = false;
                 CurrentTool = null;
             }
@@ -625,7 +623,6 @@ namespace TerrariaInGameWorldEditor.Editor
                 {
                     Main.UIScale = _actualScale;
                 }
-                GodMode = false;
                 CurrentTool = null;
                 if (Local.Settings.ShouldTeleportOnEditorClosed)
                 {
@@ -643,7 +640,6 @@ namespace TerrariaInGameWorldEditor.Editor
                     _actualScale = Main.UIScale;
                     Main.UIScale = Scale;
                 }
-                GodMode = true;
                 Main.ingameOptionsWindow = false;
                 _screenPositionOffset = Main.screenPosition;
                 Main.blockInput = true;
