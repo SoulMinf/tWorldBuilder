@@ -6,11 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
-using Terraria.GameContent.Creative;
 using Terraria.GameContent.UI.Chat;
 using Terraria.GameInput;
 using Terraria.ID;
-using Terraria.IO;
 using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
@@ -68,7 +66,7 @@ namespace TerrariaInGameWorldEditor.Editor
         private EditorUI _mainUIState;
         private UserInterface _mainUserInterface;
         private bool _wasSmartCursorActive = false;
-        public bool GodMode { get; set; } = true;
+        public bool GodMode { get; set; } = false;
 
         // windows
         private TileSelectorUI _selectTileUIState;
