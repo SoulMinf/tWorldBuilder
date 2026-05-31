@@ -50,7 +50,10 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.Settings
                 if (File.Exists(p))
                 {
                     TIGWESettings settings = JsonSerializer.Deserialize<TIGWESettings>(File.ReadAllText(p), new JsonSerializerOptions { WriteIndented = true, Converters = { new JsonStringEnumConverter() } });
-                    return settings;
+                    if (settings != null)
+                    {
+                        return settings;
+                    }
                 }
             }
             catch (Exception ex)
