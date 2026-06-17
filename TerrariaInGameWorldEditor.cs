@@ -70,5 +70,7 @@ namespace TerrariaInGameWorldEditor
                 Main.NewText($"[c/CC3300:({MODNAME} {LocalizationUtils.GetTextValue("Mod.Error")})] {text}");
             }
         }
+
+        
     }
 }

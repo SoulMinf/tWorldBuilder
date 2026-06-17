@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Input;
 using MonoMod.Cil;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Terraria;
 using Terraria.DataStructures;
@@ -190,7 +191,7 @@ namespace TerrariaInGameWorldEditor.Editor
                 On_Player.TryToToggleSmartCursor -= DisableSmartCursor;
                 LanguageManager.Instance.OnLanguageChanged -= LanguageChanged;
                 On_Main.ClampScreenPositionToWorld -= OverrideScreenClamp;
-                TIGWESettings.Save($"{ModLoader.ModPath.Replace("\\Mods", "")}\\{TerrariaInGameWorldEditor.MODNAME}\\settings", Settings);
+                TIGWESettings.Save(Path.Combine(Path.GetDirectoryName(ModLoader.ModPath), TerrariaInGameWorldEditor.MODNAME, "settings"), Settings);
             }
         }
 
@@ -200,7 +201,7 @@ namespace TerrariaInGameWorldEditor.Editor
             if (!Main.dedServ)
             {
                 ResetEditor();
-                TIGWESettings.Save($"{ModLoader.ModPath.Replace("\\Mods", "")}\\{TerrariaInGameWorldEditor.MODNAME}\\settings", Settings);
+                TIGWESettings.Save(Path.Combine(Path.GetDirectoryName(ModLoader.ModPath), TerrariaInGameWorldEditor.MODNAME, "settings"), Settings);
             }
         }
 
@@ -212,7 +213,7 @@ namespace TerrariaInGameWorldEditor.Editor
             {
                 Local = this;
                 Settings = new TIGWESettings(); // just some default settings to use so settings arent null during load
-                Settings = TIGWESettings.Load($"{ModLoader.ModPath.Replace("\\Mods", "")}\\{TerrariaInGameWorldEditor.MODNAME}\\settings");
+                Settings = TIGWESettings.Load(Path.Combine(Path.GetDirectoryName(ModLoader.ModPath), TerrariaInGameWorldEditor.MODNAME, "settings"));
                 _pasteTool = new PasteTool();
                 Tools = new List<Tool> { new BrushTool(), new EraseTool(), new LineTool(), new ShapesTool(), new PaintBucketTool(), new TilePickerTool(), new BoxSelectionTool(), new MagicWandTool(), new LassoTool(), new MoveTool() };
 

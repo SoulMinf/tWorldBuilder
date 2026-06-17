@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -122,12 +123,9 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.TileSelector
             propertiesScrollbar.Height.Set(propertiesGridBorder.Height.Pixels, 0);
             propertiesScrollbar.Width.Set(20, 0);
             border.Append(propertiesScrollbar);
-            TIGWEButton tilePropertiesInfoButton = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/EditorWindows/InfoButton"));
+            TIGWEButton tilePropertiesInfoButton = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/EditorWindows/InfoButton", AssetRequestMode.ImmediateLoad));
             tilePropertiesInfoButton.HoverText = LocalizationUtils.GetTextValue("Windows.TileSelector.HoverText.TileProperties");
-            tilePropertiesInfoButton.SetVisibility(0.7f, 1);
             tilePropertiesInfoButton.SetHoverImage(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/EditorWindows/InfoButtonHover"));
-            tilePropertiesInfoButton.Width.Set(26, 0);
-            tilePropertiesInfoButton.Height.Set(26, 0);
             tilePropertiesInfoButton.Top.Set(tilePropertiesSearchBar.Top.Pixels, 0);
             tilePropertiesInfoButton.Left.Set(tilePropertiesSearchBar.Left.Pixels + tilePropertiesSearchBar.Width.Pixels + 2, 0);
             border.Append(tilePropertiesInfoButton);
@@ -176,12 +174,9 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.TileSelector
             tileScrollbar.Height.Set(tileGridBorder.Height.Pixels, 0);
             tileScrollbar.Width.Set(20, 0);
             border.Append(tileScrollbar);
-            TIGWEButton tileInfoButton = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/EditorWindows/InfoButton"));
+            TIGWEButton tileInfoButton = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/EditorWindows/InfoButton", AssetRequestMode.ImmediateLoad));
             tileInfoButton.HoverText = LocalizationUtils.GetTextValue("Windows.TileSelector.HoverText.TileInfo");
-            tileInfoButton.SetVisibility(0.7f, 1);
             tileInfoButton.SetHoverImage(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/EditorWindows/InfoButtonHover"));
-            tileInfoButton.Width.Set(26, 0);
-            tileInfoButton.Height.Set(26, 0);
             tileInfoButton.Top.Set(tileSearchBar.Top.Pixels, 0);
             tileInfoButton.Left.Set(tileSearchBar.Left.Pixels + tileSearchBar.Width.Pixels + 2, 0);
             border.Append(tileInfoButton);

@@ -40,7 +40,7 @@ namespace TerrariaInGameWorldEditor.UIElements.DirectoryGrid
                     TIGWEDirectoryItem item2 = (TIGWEDirectoryItem)element2;
 
                     // comepare paths
-                    return (item1.FullPath + (item1 is TIGWEDirectoryFile ? FileSearchPattern : "\\")).CompareTo(item2.FullPath + (item2 is TIGWEDirectoryFile ? FileSearchPattern : "\\"));
+                    return (item1.FullPath + (item1 is TIGWEDirectoryFile ? FileSearchPattern : Path.DirectorySeparatorChar.ToString())).CompareTo(item2.FullPath + (item2 is TIGWEDirectoryFile ? FileSearchPattern : Path.DirectorySeparatorChar.ToString()));
                 }));
                 RecalculateChildren();
             };
@@ -235,11 +235,11 @@ namespace TerrariaInGameWorldEditor.UIElements.DirectoryGrid
 
             // make sure we dont try to create a file with the same name as another one
             int num = 1;
-            string fullPath = $"{DirectoryPath}\\{pathFromGrid}\\New Folder ({num})";
+            string fullPath = Path.Combine(DirectoryPath, pathFromGrid, $"New Folder ({num})");
             while (Directory.Exists(fullPath))
             {
                 num++;
-                fullPath = $"{DirectoryPath}\\{pathFromGrid}\\New Folder ({num})";
+                fullPath = Path.Combine(DirectoryPath, pathFromGrid, $"New Folder ({num})");
             }
 
             // create the directory and UIBlueprintItem

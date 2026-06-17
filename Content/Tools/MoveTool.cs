@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameInput;
@@ -22,7 +23,7 @@ namespace TerrariaInGameWorldEditor.Content.Tools
 
         public MoveTool()
         {
-            ToggleToolButton = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/Tools/MoveTool"));
+            ToggleToolButton = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/Tools/MoveTool", AssetRequestMode.ImmediateLoad));
             ToggleToolButton.HoverText = LocalizationUtils.GetTextValue("Tools.MoveTool.HoverText");
         }
 
@@ -85,29 +86,29 @@ namespace TerrariaInGameWorldEditor.Content.Tools
                 {
                     // see what tile are affected
                     Point16 point = new Point16(Player.tileTargetX - (int)_offset.X, Player.tileTargetY - (int)_offset.Y);
-                    TileCollection _allTilesAffected = new TileCollection();
+                    TileCollection allTilesAffected = new TileCollection();
                     foreach (var tile in _selectionCopy)
                     {
                         int x = tile.Key.X + point.X - _selectionCopy.GetMinX();
                         int y = tile.Key.Y + point.Y - _selectionCopy.GetMinY();
-                        _allTilesAffected.TryAddTile(new Point16(x, y), new TileCopy(x, y));
+                        allTilesAffected.TryAddTile(new Point16(x, y), new TileCopy(x, y));
                     }
                     ToolUtils.Paste(_selectionCopy, point, false);
 
                     // move selection
-                    TileCollection _newSelection = new TileCollection();
+                    TileCollection newSelection = new TileCollection();
                     int offsetX = (_originPos.X - Player.tileTargetX);
                     int offsetY = (_originPos.Y - Player.tileTargetY);
                     foreach (var tile in _selectionCopy)
                     {
                         int x = tile.Key.X - offsetX;
                         int y = tile.Key.Y - offsetY;
-                        _newSelection.TryAddTile(new Point16(x, y), tile.Value);
+                        newSelection.TryAddTile(new Point16(x, y), tile.Value);
                     }
-                    EditorSystem.Local.CurrentSelection = _newSelection;
+                    EditorSystem.Local.CurrentSelection = newSelection;
 
                     // add everything to undo so the delete and paste can both be undone at the same time
-                    _selectionCopy.TryAddTiles(_allTilesAffected);
+                    _selectionCopy.TryAddTiles(allTilesAffected);
                     EditorSystem.Local.AddToUndoHistory(_selectionCopy);
 
                     _isDraggingLeft = false;

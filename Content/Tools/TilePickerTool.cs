@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameInput;
@@ -17,7 +18,7 @@ namespace TerrariaInGameWorldEditor.Content.Tools
     {
         public TilePickerTool()
         {
-            ToggleToolButton = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/Tools/TilePickerTool"));
+            ToggleToolButton = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/Tools/TilePickerTool", AssetRequestMode.ImmediateLoad));
             ToggleToolButton.HoverText = LocalizationUtils.GetTextValue("Tools.TilePickerTool.HoverText");
         }
 

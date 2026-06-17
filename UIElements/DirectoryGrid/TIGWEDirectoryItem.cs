@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using ReLogic.Content;
 using System;
 using System.IO;
 using Terraria;
@@ -68,39 +69,27 @@ namespace TerrariaInGameWorldEditor.UIElements.DirectoryGrid
             Append(_nameText);
 
             // delete
-            _deleteButton = new TIGWEButton(ModContent.Request<Texture2D>($"{UIElementUtils.Path}/UIElements/DirectoryGrid/Delete"));
+            _deleteButton = new TIGWEButton(ModContent.Request<Texture2D>($"{UIElementUtils.Path}/UIElements/DirectoryGrid/Delete", AssetRequestMode.ImmediateLoad));
             ModContent.Request<Texture2D>($"{UIElementUtils.Path}/UIElements/DirectoryGrid/DeleteConfirm");
-            _deleteButton.SetVisibility(0.8f, 1f);
             _deleteButton.HoverText = LocalizationUtils.GetTextValue("UIElements.DirectoryItem.HoverText.Delete");
-            _deleteButton.Width.Set(26, 0f);
-            _deleteButton.Height.Set(26, 0f);
             _deleteButton.OnLeftClick += (_, _) => StartDelete();
             _deleteButton.OnMouseOut += (_, _) => CancelDelete();
             Append(_deleteButton);
 
             // rename
-            _renameButton = new TIGWEButton(ModContent.Request<Texture2D>($"{UIElementUtils.Path}/UIElements/DirectoryGrid/Rename"));
-            _renameButton.SetVisibility(0.8f, 1f);
+            _renameButton = new TIGWEButton(ModContent.Request<Texture2D>($"{UIElementUtils.Path}/UIElements/DirectoryGrid/Rename", AssetRequestMode.ImmediateLoad));
             _renameButton.HoverText = LocalizationUtils.GetTextValue("UIElements.DirectoryItem.HoverText.Rename");
-            _renameButton.Width.Set(26, 0f);
-            _renameButton.Height.Set(26, 0f);
             _renameButton.OnLeftClick += (_, _) => StartRename();
             Append(_renameButton);
             _renameTextField = new TIGWETextField("", 100);
             _renameTextField.Height.Set(26, 0f);
             _renameTextField.Width.Set(150, 0f);
-            _confirmRenameButton = new TIGWEButton(ModContent.Request<Texture2D>($"{UIElementUtils.Path}/UIElements/DirectoryGrid/Confirm"));
-            _confirmRenameButton.SetVisibility(0.8f, 1f);
+            _confirmRenameButton = new TIGWEButton(ModContent.Request<Texture2D>($"{UIElementUtils.Path}/UIElements/DirectoryGrid/Confirm", AssetRequestMode.ImmediateLoad));
             _confirmRenameButton.HoverText = LocalizationUtils.GetTextValue("UIElements.DirectoryItem.HoverText.ConfirmRename");
-            _confirmRenameButton.Height.Set(26, 0f);
-            _confirmRenameButton.Width.Set(26, 0f);
             _confirmRenameButton.OnLeftClick += (_, _) => ConfirmRename();
 
             // select
-            _selectButton = new TIGWEButton(ModContent.Request<Texture2D>($"{UIElementUtils.Path}/UIElements/DirectoryGrid/Confirm"));
-            _selectButton.SetVisibility(0.8f, 1f);
-            _selectButton.Width.Set(26, 0);
-            _selectButton.Height.Set(26, 0);
+            _selectButton = new TIGWEButton(ModContent.Request<Texture2D>($"{UIElementUtils.Path}/UIElements/DirectoryGrid/Confirm", AssetRequestMode.ImmediateLoad));
             _selectButton.HoverText = LocalizationUtils.GetTextValue("UIElements.DirectoryItem.HoverText.Select");
             _selectButton.OnLeftClick += (_, _) => _parentGrid.OnSelectItem(this);
             Append(_selectButton);

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using ReLogic.Graphics;
 using System;
 using System.Collections.Generic;
@@ -81,12 +82,10 @@ namespace TerrariaInGameWorldEditor.UIElements.DropDown
             };
             Append(_selectedOptionTextField);
 
-            _dropDownButton = new TIGWEButton(ModContent.Request<Texture2D>($"{UIElementUtils.Path}/UIElements/DropDown/DropDownButton"));
+            _dropDownButton = new TIGWEButton(ModContent.Request<Texture2D>($"{UIElementUtils.Path}/UIElements/DropDown/DropDownButton", AssetRequestMode.ImmediateLoad));
             _dropDownButton.SetHoverImage(ModContent.Request<Texture2D>($"{UIElementUtils.Path}/UIElements/DropDown/DropDownButtonHover"));
             _dropDownButton.SetVisibility(1f, 1f);
             _dropDownButton.HAlign = 1f;
-            _dropDownButton.Width.Set(22, 0);
-            _dropDownButton.Height.Set(26, 0);
             _dropDownButton.OnMouseOver += (_, _) =>
             {
                 RemoveChild(_dropDownButton);

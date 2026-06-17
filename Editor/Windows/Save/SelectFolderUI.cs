@@ -1,4 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
+using System.IO;
 using Terraria;
 using Terraria.ModLoader;
 using TerrariaInGameWorldEditor.Common.Utils;
@@ -33,7 +35,7 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.Save
             grid.Top.Set(74, 0);
             grid.ListPadding = 2;
             grid.PaddingTop = 2;
-            grid.SetDirectory(ModLoader.ModPath.Replace("\\Mods", "") + $"\\{TerrariaInGameWorldEditor.MODNAME}\\saves\\");
+            grid.SetDirectory(Path.Combine(Path.GetDirectoryName(ModLoader.ModPath), TerrariaInGameWorldEditor.MODNAME, "saves"));
             grid.CanSelectFiles = false;
             grid.ShouldShowFiles = false;
             grid.ShouldFilesAppearInSearch = false;
@@ -58,37 +60,28 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.Save
             Append(border);
 
             // open folder
-            TIGWEButton openFolder = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/EditorWindows/OpenFolderButton"));
-            openFolder.Width.Set(26, 0);
-            openFolder.Height.Set(26, 0);
+            TIGWEButton openFolder = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/EditorWindows/OpenFolderButton", AssetRequestMode.ImmediateLoad));
             openFolder.Top.Set(42, 0);
             openFolder.Left.Set(6, 0);
-            openFolder.SetVisibility(0.7f, 1);
             openFolder.HoverText = LocalizationUtils.GetTextValue("Windows.SelectFolder.HoverText.OpenFolder");
             openFolder.OnLeftClick += (_, _) =>
             {
-                Utils.OpenFolder(ModLoader.ModPath.Replace("\\Mods", "") + $"\\{TerrariaInGameWorldEditor.MODNAME}\\saves\\");
+                Utils.OpenFolder(Path.Combine(Path.GetDirectoryName(ModLoader.ModPath), TerrariaInGameWorldEditor.MODNAME, "saves"));
             };
             Append(openFolder);
 
             // create folder
-            TIGWEButton createFolder = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/EditorWindows/CreateFolderButton"));
-            createFolder.Width.Set(26, 0);
-            createFolder.Height.Set(26, 0);
+            TIGWEButton createFolder = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/EditorWindows/CreateFolderButton", AssetRequestMode.ImmediateLoad));
             createFolder.Top.Set(42, 0);
             createFolder.Left.Set(openFolder.Left.Pixels + openFolder.Width.Pixels + 2, 0);
-            createFolder.SetVisibility(0.7f, 1);
             createFolder.HoverText = LocalizationUtils.GetTextValue("Windows.SelectFolder.HoverText.CreateFolder");
             createFolder.OnLeftClick += (_, _) => grid.CreateNewDirectory();
             Append(createFolder);
 
             // refresh
-            TIGWEButton refresh = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/EditorWindows/RefreshButton"));
-            refresh.Width.Set(26, 0);
-            refresh.Height.Set(26, 0);
+            TIGWEButton refresh = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/EditorWindows/RefreshButton", AssetRequestMode.ImmediateLoad));
             refresh.Top.Set(42, 0);
             refresh.Left.Set(createFolder.Left.Pixels + createFolder.Width.Pixels + 2, 0);
-            refresh.SetVisibility(0.7f, 1);
             refresh.HoverText = LocalizationUtils.GetTextValue("Windows.SelectFolder.HoverText.Refresh");
             Append(refresh);
 

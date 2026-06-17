@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using Terraria;
@@ -42,7 +43,7 @@ namespace TerrariaInGameWorldEditor.Content.Tools
         
         public LineTool()
         {
-            ToggleToolButton = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/Tools/LineTool"));
+            ToggleToolButton = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/Tools/LineTool", AssetRequestMode.ImmediateLoad));
             ToggleToolButton.HoverText = LocalizationUtils.GetTextValue("Tools.LineTool.HoverText");
 
             // settings

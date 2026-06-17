@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using ReLogic.Content;
 using System;
 using Terraria;
 using Terraria.DataStructures;
@@ -39,7 +40,7 @@ namespace TerrariaInGameWorldEditor.Content.Tools
 
         public ShapesTool()
         {
-            ToggleToolButton = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/Tools/ShapesTool"));
+            ToggleToolButton = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/Tools/ShapesTool", AssetRequestMode.ImmediateLoad));
             ToggleToolButton.HoverText = LocalizationUtils.GetTextValue("Tools.ShapesTool.HoverText");
 
             // settings

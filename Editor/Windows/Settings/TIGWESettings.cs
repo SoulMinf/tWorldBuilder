@@ -19,7 +19,7 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.Settings
         public bool ShouldUpdateDrawnTiles { get; set; } = true;
         public bool ShouldEnableGodMode { get; set; } = true;
         public bool ShouldTeleportOnEditorClosed { get; set; } = true;
-        public bool ForceScaleUI { get; set; } = false;
+        public bool ForceScaleUI { get; set; } = true;
         public float UIScale { get; set; } = 1f;
         public int EditorBaseSpeed { get; set; } = 10;
         public bool FullbrightEnabled { get; set; } = false;

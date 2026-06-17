@@ -403,21 +403,12 @@ namespace TerrariaInGameWorldEditor.Common.Utils
             int p1y = point1.Y;
             int p2y = point2.Y;
 
-            // get leftmost and rightmost positions in map
             int posLeft = (p1x > p2x ? p2x : p1x);
             int posRight = (p1x > p2x ? p1x : p2x);
-
-            // set width with the new values
             int width = posRight - posLeft;
-
-            // get upmost and downmost positions in map (y is lower the higher up you are)
             int posUp = (p1y > p2y ? p2y : p1y);
             int posDown = (p1y > p2y ? p1y : p2y);
-
-            // set height with the new values
             int height = posDown - posUp;
-
-            // rectangle 
             Rectangle selection = new Rectangle(posLeft, posUp, width + 1, height + 1);
             return selection;
         }

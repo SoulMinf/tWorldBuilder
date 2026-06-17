@@ -11,7 +11,7 @@ namespace TerrariaInGameWorldEditor.UIElements.Button
 
         public TIGWEButton(Asset<Texture2D> texture) : base(texture)
         {
-
+            SetVisibility(0.8f, 1f);
         }
 
         protected override void DrawSelf(SpriteBatch spriteBatch)

@@ -14,7 +14,7 @@ namespace TerrariaInGameWorldEditor.Editor
         public TileCopy TileCopy { get; private set; }
         private Asset<Texture2D> _xTexture;
 
-        public PaletteItem(TileCopy tileCopy) : base(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/Editor/PaletteItem"))
+        public PaletteItem(TileCopy tileCopy) : base(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/Editor/PaletteItem", AssetRequestMode.ImmediateLoad))
         {
             TileCopy = tileCopy;
             _xTexture = ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/Editor/X");

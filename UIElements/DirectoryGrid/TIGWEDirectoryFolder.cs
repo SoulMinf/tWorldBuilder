@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System.Collections.Generic;
 using System.IO;
 using Terraria.ModLoader;
@@ -26,10 +27,7 @@ namespace TerrariaInGameWorldEditor.UIElements.DirectoryGrid
             _icon.Height.Set(18, 0f);
 
             // create folder
-            _createSubFolderButton = new TIGWEButton(ModContent.Request<Texture2D>($"{UIElementUtils.Path}/UIElements/DirectoryGrid/CreateFolder"));
-            _createSubFolderButton.SetVisibility(0.8f, 1f);
-            _createSubFolderButton.Width.Set(26, 0);
-            _createSubFolderButton.Height.Set(26, 0);
+            _createSubFolderButton = new TIGWEButton(ModContent.Request<Texture2D>($"{UIElementUtils.Path}/UIElements/DirectoryGrid/CreateFolder", AssetRequestMode.ImmediateLoad));
             _createSubFolderButton.HoverText = LocalizationUtils.GetTextValue("UIElements.DirectoryFolder.HoverText");
             _createSubFolderButton.OnLeftClick += (_, _) => CreateSubFolder();
             Append(_createSubFolderButton);
@@ -39,14 +37,14 @@ namespace TerrariaInGameWorldEditor.UIElements.DirectoryGrid
         {
             // make sure we dont try to create a file with the same name as another one
             int num = 1;
-            while (Directory.Exists($"{FullPath}\\New Folder ({num})"))
+            while (Directory.Exists(Path.Combine(FullPath, $"New Folder ({num})")))
             {
                 num++;
             }
 
             // create the directory and UIDirectoryFolder
-            Directory.CreateDirectory($"{FullPath}\\New Folder ({num})");
-            TIGWEDirectoryFolder folder = new TIGWEDirectoryFolder($"{FullPath}\\New Folder ({num})");
+            Directory.CreateDirectory(Path.Combine(FullPath, $"New Folder ({num})"));
+            TIGWEDirectoryFolder folder = new TIGWEDirectoryFolder(Path.Combine(FullPath, $"New Folder ({num})"));
             folder.CanSelect = CanSelect;
             folder.AssignParentGrid(_parentGrid);
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using ReLogic.Content;
 using System;
 using System.IO;
 using System.IO.Compression;
@@ -56,23 +57,17 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.Save
             Append(_pathField);
 
             // path select button
-            TIGWEButton pathSelect = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/EditorWindows/OpenFolderButton"));
-            pathSelect.SetVisibility(0.8f, 1f);
+            TIGWEButton pathSelect = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/EditorWindows/OpenFolderButton", AssetRequestMode.ImmediateLoad));
             pathSelect.Left.Set(_pathField.Left.Pixels + _pathField.Width.Pixels + 2, 0);
             pathSelect.Top.Set(_pathField.Top.Pixels, 0);
-            pathSelect.Width.Set(26, 0);
-            pathSelect.Height.Set(26, 0);
             pathSelect.HoverText = LocalizationUtils.GetTextValue("Windows.Save.HoverText.SelectPath");
             pathSelect.OnLeftClick += (_, _) => SelectPath();
             Append(pathSelect);
 
             // path reset button
-            TIGWEButton pathReset = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/EditorWindows/RefreshButton"));
-            pathReset.SetVisibility(0.8f, 1f);
+            TIGWEButton pathReset = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/EditorWindows/RefreshButton", AssetRequestMode.ImmediateLoad));
             pathReset.Left.Set(pathSelect.Left.Pixels + pathSelect.Width.Pixels + 2, 0);
             pathReset.Top.Set(_pathField.Top.Pixels, 0);
-            pathReset.Width.Set(26, 0);
-            pathReset.Height.Set(26, 0);
             pathReset.HoverText = LocalizationUtils.GetTextValue("Windows.Save.HoverText.ResetPath");
             pathReset.OnLeftClick += (_, _) => ResetPath();
             Append(pathReset);
@@ -135,7 +130,7 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.Save
 
         private void ResetPath()
         {
-            _selectedPath = $"{ModLoader.ModPath.Replace("\\Mods", "")}\\{TerrariaInGameWorldEditor.MODNAME}\\saves";
+            _selectedPath = Path.Combine(Path.GetDirectoryName(ModLoader.ModPath), TerrariaInGameWorldEditor.MODNAME, "saves");
             _pathField?.SetText(LocalizationUtils.GetTextValue("Windows.Save.FieldText.DefaultPath"));
         }
 
@@ -145,9 +140,9 @@ namespace TerrariaInGameWorldEditor.Editor.Windows.Save
             {
                 // get path where we should save to and create the saves directory if it doesnt exist
                 string name = _saveAsField.GetText();
-                string modsPath = ModLoader.ModPath.Replace("\\Mods", "");
-                Directory.CreateDirectory($"{modsPath}\\{TerrariaInGameWorldEditor.MODNAME}\\saves");
-                string path = $"{_selectedPath}\\{name}.twb";
+                string modsPath = Path.GetDirectoryName(ModLoader.ModPath);
+                Directory.CreateDirectory(Path.Combine(modsPath, TerrariaInGameWorldEditor.MODNAME, "saves"));
+                string path = Path.Combine(_selectedPath, $"{name}.twb");
                 if (!Path.Exists(_selectedPath))
                 {
                     TerrariaInGameWorldEditor.Warn(LocalizationUtils.GetTextValue("Windows.Save.Exceptions.FolderMissing"));
