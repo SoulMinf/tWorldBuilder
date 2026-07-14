@@ -41,7 +41,7 @@ namespace TerrariaInGameWorldEditor.Content.Tools
         public ShapesTool()
         {
             ToggleToolButton = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/Tools/ShapesTool", AssetRequestMode.ImmediateLoad));
-            ToggleToolButton.HoverText = LocalizationUtils.GetTextValue("Tools.ShapesTool.HoverText");
+            ToggleToolButton.HoverText = Language.GetText("Mods.TerrariaInGameWorldEditor.Tools.ShapesTool.HoverText");
 
             // settings
             // mode
