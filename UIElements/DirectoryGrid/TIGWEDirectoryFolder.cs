@@ -2,6 +2,7 @@
 using ReLogic.Content;
 using System.Collections.Generic;
 using System.IO;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.UI;
 using TerrariaInGameWorldEditor.Common.Utils;
