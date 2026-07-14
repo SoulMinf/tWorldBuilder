@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.IO.Compression;
 using Terraria.GameContent.UI.Elements;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using TerrariaInGameWorldEditor.Common;
 using TerrariaInGameWorldEditor.Common.Utils;
