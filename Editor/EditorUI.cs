@@ -5,6 +5,7 @@ using System;
 using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.UI.Elements;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.UI.Elements;
 using Terraria.UI;
