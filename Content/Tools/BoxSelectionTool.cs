@@ -6,6 +6,7 @@ using System;
 using Terraria;
 using Terraria.DataStructures;
 using Terraria.GameInput;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using TerrariaInGameWorldEditor.Common;
 using TerrariaInGameWorldEditor.Common.Utils;
