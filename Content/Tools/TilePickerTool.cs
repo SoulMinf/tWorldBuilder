@@ -19,7 +19,7 @@ namespace TerrariaInGameWorldEditor.Content.Tools
         public TilePickerTool()
         {
             ToggleToolButton = new TIGWEButton(ModContent.Request<Texture2D>($"{TerrariaInGameWorldEditor.ASSET_PATH}/Assets/Tools/TilePickerTool", AssetRequestMode.ImmediateLoad));
-            ToggleToolButton.HoverText = LocalizationUtils.GetTextValue("Tools.TilePickerTool.HoverText");
+            ToggleToolButton.HoverText = Language.GetText("Mods.TerrariaInGameWorldEditor.Tools.TilePickerTool.HoverText");
         }
 
         public override string GetInfoText()
