@@ -2,6 +2,7 @@
 using ReLogic.Content;
 using System.IO;
 using Terraria;
+using Terraria.Localization;
 using Terraria.ModLoader;
 using TerrariaInGameWorldEditor.Common.Utils;
 using TerrariaInGameWorldEditor.UIElements.Button;
